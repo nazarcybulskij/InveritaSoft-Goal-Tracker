@@ -1,5 +1,6 @@
 package nazarko.inveritasoft.com.inveritasoft_goal_tracker
 
+import android.content.Context
 import dagger.Component
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.util.DB
 
@@ -12,6 +13,8 @@ import nazarko.inveritasoft.com.inveritasoft_goal_tracker.util.DB
         AppContextModule::class
 ))
 public interface HabitsApplicationComponent {
+
+    fun context(): Context
 
     val database: DB
 

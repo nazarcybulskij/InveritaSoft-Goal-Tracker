@@ -11,14 +11,14 @@ import dagger.Provides;
 
 @Module
 public class AppContextModule {
+
     private final Context context;
 
-    public AppContextModule(@AppContext Context context) {
+    public AppContextModule(Context context) {
         this.context = context;
     }
 
     @Provides
-    @AppContext
     Context getContext() {
         return context;
     }

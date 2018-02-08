@@ -2,6 +2,7 @@ package nazarko.inveritasoft.com.inveritasoft_goal_tracker
 
 import android.app.Application
 import android.content.Context
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.DaggerHabitsActivityComponent
 
 /**
  * Created by nazarko on 08.02.18.
