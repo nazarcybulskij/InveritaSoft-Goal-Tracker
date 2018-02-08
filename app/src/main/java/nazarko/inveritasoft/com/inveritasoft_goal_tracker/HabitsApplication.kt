@@ -18,6 +18,7 @@ class HabitsApplication : Application() {
                 .builder()
                 .appContextModule(AppContextModule(context))
                 .build()
+        component.database.toast();
 
     }
 

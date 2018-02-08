@@ -20,7 +20,9 @@ abstract class HabitsActivity :AppCompatActivity() {
                 .builder()
                 .habitsApplicationComponent(appComponent)
                 .build()
-        
+
+        component.dao.toast();
+
     }
 
 

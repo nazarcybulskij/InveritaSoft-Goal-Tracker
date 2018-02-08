@@ -1,5 +1,6 @@
 package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui
 
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.util.DB
@@ -13,8 +14,8 @@ class HabitsActivityModule {
 
     @Provides
     @ActivityScope
-    fun getDao(): Dao {
-        return Dao()
+    fun getDao(context: Context): Dao {
+        return Dao(context)
     }
 
 }
