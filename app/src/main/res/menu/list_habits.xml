@@ -1,0 +1,77 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context=".MainActivity">
+
+    <item
+        android:id="@+id/actionAdd"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="add_habit"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_filter"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="filter"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/actionHideArchived"
+                android:checkable="true"
+                android:enabled="true"
+                android:title="hide_archived"/>
+
+            <item
+                android:id="@+id/actionHideCompleted"
+                android:checkable="true"
+                android:enabled="true"
+                android:title="hide_completed"/>
+
+            <item android:title="sort">
+                <menu>
+                    <item
+                        android:id="@+id/actionSortManual"
+                        android:title="manually"/>
+
+                    <item
+                        android:id="@+id/actionSortName"
+                        android:title="by_name"/>
+
+                    <item
+                        android:id="@+id/actionSortColor"
+                        android:title="by_color"/>
+
+                    <item
+                        android:id="@+id/actionSortScore"
+                        android:title="by_score"/>
+                </menu>
+            </item>
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/actionToggleNightMode"
+        android:checkable="true"
+        android:enabled="true"
+        android:orderInCategory="50"
+        android:title="night_mode"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/actionSettings"
+        android:orderInCategory="100"
+        android:title="action_settings"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/actionFAQ"
+        android:orderInCategory="100"
+        android:title="help"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/actionAbout"
+        android:orderInCategory="100"
+        android:title="about"
+        app:showAsAction="never"/>
+</menu>

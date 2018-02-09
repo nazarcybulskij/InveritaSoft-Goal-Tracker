@@ -1,6 +1,5 @@
-package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui
+package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.R
 
@@ -10,7 +9,4 @@ class MainActivity : HabitsActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
     }
-
-
-
 }

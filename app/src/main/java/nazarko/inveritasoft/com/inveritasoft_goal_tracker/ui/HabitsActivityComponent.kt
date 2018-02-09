@@ -2,6 +2,8 @@ package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui
 
 import dagger.Component
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.HabitsApplicationComponent
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.HabitsActivity
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.MainActivity
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.util.DB
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.util.Dao
 
@@ -11,10 +13,14 @@ import nazarko.inveritasoft.com.inveritasoft_goal_tracker.util.Dao
 
 @ActivityScope
 @Component(modules = arrayOf(
-    HabitsActivityModule::class
+        EmptyModule::class,
+        HabitsActivityModule::class
 ), dependencies = arrayOf(HabitsApplicationComponent::class))
 interface HabitsActivityComponent {
 
     val dao: Dao
+
+
+    fun inject(habbitActivity: HabitsActivity)
 
 }
