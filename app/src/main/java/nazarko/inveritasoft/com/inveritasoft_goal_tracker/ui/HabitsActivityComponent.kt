@@ -3,8 +3,6 @@ package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui
 import dagger.Component
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.HabitsApplicationComponent
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.HabitsActivity
-import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.MainActivity
-import nazarko.inveritasoft.com.inveritasoft_goal_tracker.util.DB
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.util.Dao
 
 /**

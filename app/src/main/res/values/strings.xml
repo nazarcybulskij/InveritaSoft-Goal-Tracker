@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">InveritaSoft-Goal-Tracker</string>
+    <string name="menu_add">menu add</string>
+    <string name="menu_edit">menu edit</string>
+    <string name="menu_remind">menu remind</string>
+    <string name="menu_note">menu note</string>
+    <string name="menu_range">Range</string>
+    <string name="menu_weekly">menu weekly</string>
+    <string name="menu_export">Export</string>
+    <string name="menu_sync">Sync</string>
+    <string name="menu_lock">Lock</string>
 </resources>
