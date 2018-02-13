@@ -2,21 +2,23 @@ package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 import kotlinx.android.synthetic.main.activity_main.*
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.R
-import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.ClickDecorator
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.HighlightWeekendsDecorator
-import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.SelectedDecorator
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.OneDaySelectedDecorator
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.SelectedManyDecorator
 import java.util.*
+import kotlin.collections.HashSet
 
 class MainActivity : HabitsActivity(),OnDateSelectedListener {
 
-    var oneDayDecorator = ClickDecorator();
+    lateinit var selectedManyDecorator:SelectedManyDecorator;
+    lateinit var oneDaySelectedDecorator:OneDaySelectedDecorator;
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +30,11 @@ class MainActivity : HabitsActivity(),OnDateSelectedListener {
         var calendar = Calendar.getInstance();
         calendarView.currentDate =  CalendarDay.from(calendar.time);
         calendarView.setOnDateChangedListener(this)
-        calendarView.addDecorators(HighlightWeekendsDecorator(),SelectedDecorator(this))
+
+        selectedManyDecorator = SelectedManyDecorator(this,HashSet<CalendarDay>())
+       // oneDaySelectedDecorator = OneDaySelectedDecorator(this,HashSet<CalendarDay>())
+
+        calendarView.addDecorators(HighlightWeekendsDecorator(),selectedManyDecorator)
         weekButton.setOnClickListener( object : View.OnClickListener{
             override fun onClick(p0: View?) {
                 calendarView.state().edit()
@@ -43,10 +49,12 @@ class MainActivity : HabitsActivity(),OnDateSelectedListener {
                         .commit()
             }
         });
+        calendarView.setDateTextAppearance(R.style.CalendarDateTextAppearance)
     }
 
     override fun onDateSelected(widget: MaterialCalendarView, date: CalendarDay, selected: Boolean) {
-        oneDayDecorator.date = date;
+        selectedManyDecorator.addDate(date)
+        //oneDaySelectedDecorator.addDate(date)
         calendarView.invalidateDecorators()
     }
 }
