@@ -16,19 +16,25 @@
    <TextView
        android:id="@+id/dateSubtitleText"
        android:layout_width="match_parent"
-       android:layout_height="wrap_content" />
+       android:paddingTop="@dimen/padding_top"
+       android:layout_height="wrap_content"
+       android:textSize="@dimen/text_size"/>
 
    <TextView
+       android:paddingTop="@dimen/padding_top"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-       android:text="@string/comment"/>
+       android:text="@string/comment"
+       android:textSize="@dimen/text_size_title"/>
 
    <EditText
        android:id="@+id/commentEdit"
        android:layout_width="match_parent"
-       android:layout_height="wrap_content" />
+       android:layout_height="wrap_content"
+       android:textSize="@dimen/text_size_title"/>
 
    <LinearLayout
+       android:paddingTop="@dimen/padding_top"
        android:layout_width="match_parent"
        android:layout_height="48dp"
        android:weightSum="3"
@@ -43,6 +49,7 @@
           android:textAllCaps="true"
           android:text="@string/cancel"
           android:gravity="center"
+          android:textStyle="bold"
           android:textSize="@dimen/text_size_button"/>
 
       <TextView
@@ -54,6 +61,7 @@
           android:textAllCaps="true"
           android:text="@string/delete"
           android:gravity="center"
+          android:textStyle="bold"
           android:textSize="@dimen/text_size_button"/>
 
       <TextView
@@ -65,6 +73,7 @@
           android:textAllCaps="true"
           android:text="@string/set"
           android:gravity="center"
+          android:textStyle="bold"
           android:textSize="@dimen/text_size_button"/>
 
    </LinearLayout>
