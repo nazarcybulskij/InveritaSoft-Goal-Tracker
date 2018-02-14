@@ -21,5 +21,14 @@
         <item name="android:padding">5dp</item>
     </style>
 
+    <style name="NoteDialogThema" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowAnimationStyle">@style/DialogThema</item>
+    </style>
+
+    <style name="DialogThema">
+        <item name="android:windowEnterAnimation">@anim/anim_in</item>
+        <item name="android:windowExitAnimation">@anim/anim_out</item>
+    </style>
+
 
 </resources>

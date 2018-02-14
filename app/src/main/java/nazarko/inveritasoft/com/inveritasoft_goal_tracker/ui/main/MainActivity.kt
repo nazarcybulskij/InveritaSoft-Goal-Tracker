@@ -10,6 +10,7 @@ import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.futu
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decoratorsold.HighlightWeekendsDecorator
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.model.Goal
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.model.ResultDay
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.view.NoteDialog
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -117,7 +118,7 @@ class MainActivity : HabitsActivity(),OnDateSelectedListener, OnDateLongSelected
 
 
     override fun onDateLongSelected(widget: MaterialCalendarView, date: CalendarDay) {
-        Toast.makeText(this, date.toString(), Toast.LENGTH_SHORT).show()
+        NoteDialog.show(this,date)
     }
 
 
