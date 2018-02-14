@@ -9,16 +9,18 @@ import android.os.Bundle
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.R
 import android.R.attr.x
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.view.*
 import android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE
-
+import android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
+import android.widget.LinearLayout
 
 
 /**
  * Created by nazarko on 14.02.18.
  */
 class NoteDialog : DialogFragment() {
-
 
 
     interface NodeDialogListener{
@@ -50,12 +52,14 @@ class NoteDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val view = activity.layoutInflater.inflate(R.layout.dialog_note, null)
-        return AlertDialog.Builder(activity, R.style.NoteDialogThema)
+        return AlertDialog.Builder(activity)
                 .setView(view)
                 .create()
                 .apply {
                     setCanceledOnTouchOutside(false)
                     window.setGravity(Gravity.TOP)
+                    window.requestFeature(Window.FEATURE_NO_TITLE);
+                    window.setSoftInputMode(SOFT_INPUT_STATE_VISIBLE)
                     val params = window.attributes
                     params.y = 100
                     window.attributes = params

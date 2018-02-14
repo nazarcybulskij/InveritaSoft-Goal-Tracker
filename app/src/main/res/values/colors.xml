@@ -9,5 +9,6 @@
 
     <color name="red_70" >#70FF0000</color>
     <color name="blue_70" >#700000FF</color>
+    <color name="green">#006400 </color>
 
 </resources>

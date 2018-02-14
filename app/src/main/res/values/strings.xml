@@ -9,4 +9,9 @@
     <string name="menu_export">Export</string>
     <string name="menu_sync">Sync</string>
     <string name="menu_lock">Lock</string>
+    <string name="add_note">Add Note</string>
+    <string name="comment">Comment:</string>
+    <string name="cancel">cancel</string>
+    <string name="set">set</string>
+    <string name="delete">delete</string>
 </resources>
