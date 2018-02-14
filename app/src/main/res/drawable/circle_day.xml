@@ -50,9 +50,4 @@
             android:pathData="M560 320C560 452.46 452.46 560 320 560C187.54 560 80 452.46 80 320C80 187.54
 187.54 80 320 80C452.46 80 560 187.54 560 320Z" />
     </group>
-    <path
-        android:fillColor="#0c327a"
-        android:strokeWidth="1"
-        android:pathData="M114.02 300L114.02 340L0 340L0 300L0 300L114.02 300ZM640 300L640 340L640 340L640
-300L640 300L640 300Z" />
 </vector>

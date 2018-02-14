@@ -1,4 +1,4 @@
-package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator
+package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decoratorsold
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -21,10 +21,6 @@ class HighlightWeekendsDecorator:DayViewDecorator {
     init{
         highlightDrawable = ColorDrawable(color)
     }
-
-
-
-
 
     override fun shouldDecorate(day: CalendarDay?): Boolean {
         day?.copyTo(calendar)

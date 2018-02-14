@@ -1,4 +1,4 @@
-package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator
+package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decoratorsold
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -15,14 +15,26 @@ import java.util.HashSet
  */
 class SelectedManyDecorator(var context: Context,val dates: HashSet<CalendarDay>): DayViewDecorator {
 
-    lateinit var drawable: Drawable
+    lateinit var twoDayDrawable: Drawable
+    lateinit var leftDayDrawable: Drawable
+    lateinit var rigthDayDrawable: Drawable
+    lateinit var oneDayDrawable: Drawable
+
     lateinit var soliddrawable: Drawable
+    lateinit var todaydrawable: Drawable
+
     lateinit var finalDrawable:LayerDrawable
 
+
+
     init{
-        drawable = ContextCompat.getDrawable(context, R.drawable.two_day_comment)
-        soliddrawable = ContextCompat.getDrawable(context,R.drawable.circle_background)
-        finalDrawable = LayerDrawable(arrayOf(soliddrawable,drawable))
+        twoDayDrawable = ContextCompat.getDrawable(context, R.drawable.two_day)
+        leftDayDrawable = ContextCompat.getDrawable(context, R.drawable.left_day)
+        rigthDayDrawable = ContextCompat.getDrawable(context, R.drawable.rigth_day)
+        oneDayDrawable = ContextCompat.getDrawable(context, R.drawable.circle_day)
+        soliddrawable = ContextCompat.getDrawable(context,R.drawable.fail_circle_background)
+        todaydrawable = ContextCompat.getDrawable(context,R.drawable.today)
+        finalDrawable = LayerDrawable(arrayOf(todaydrawable,soliddrawable,twoDayDrawable))
     }
 
     override fun shouldDecorate(day: CalendarDay?): Boolean {

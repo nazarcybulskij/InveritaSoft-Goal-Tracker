@@ -8,17 +8,30 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 import kotlinx.android.synthetic.main.activity_main.*
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.R
-import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.HighlightWeekendsDecorator
-import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.OneDaySelectedDecorator
-import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.SelectedManyDecorator
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.future.*
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decoratorsold.HighlightWeekendsDecorator
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.model.Goal
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.model.ResultDay
 import java.util.*
-import kotlin.collections.HashSet
+import kotlin.collections.HashMap
 
 class MainActivity : HabitsActivity(),OnDateSelectedListener {
 
-    lateinit var selectedManyDecorator:SelectedManyDecorator;
-    lateinit var oneDaySelectedDecorator:OneDaySelectedDecorator;
+    lateinit var dateFailDecorator: FutureDateFailDecorator;
+    lateinit var dateSuccessDecorator: FutureDateSuccessDecorator;
 
+    lateinit var pastFailDecorator: PastDateFailDecorator;
+    lateinit var pastSuccessDecorator: PastDateSuccessDecorator;
+    lateinit var pastLeftDaySuccessDecorator: PastDateLeftDaySuccessDecorator;
+    lateinit var pastRigthDaySuccessDecorator: PastDateRigthDaySuccessDecorator;
+    lateinit var pastTwoDaySuccessDecorator: PastDateTwoDaySuccessDecorator;
+
+    lateinit var todayFailDecorator: TodayDateFailDecorator;
+    lateinit var todaySuccessDecorator: TodayDateSuccessDecorator;
+    lateinit var todayDateOnlyDecorator: TodayDateOnlyDecorator;
+    lateinit var todayLeftDayOnlyDecorator: TodayDateLeftDaySuccessDecorator;
+
+    var goals = HashMap<CalendarDay,Goal>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,10 +44,38 @@ class MainActivity : HabitsActivity(),OnDateSelectedListener {
         calendarView.currentDate =  CalendarDay.from(calendar.time);
         calendarView.setOnDateChangedListener(this)
 
-        selectedManyDecorator = SelectedManyDecorator(this,HashSet<CalendarDay>())
-       // oneDaySelectedDecorator = OneDaySelectedDecorator(this,HashSet<CalendarDay>())
+        dateFailDecorator  = FutureDateFailDecorator(this, goals)
+        dateSuccessDecorator  = FutureDateSuccessDecorator(this,goals)
 
-        calendarView.addDecorators(HighlightWeekendsDecorator(),selectedManyDecorator)
+        todayFailDecorator  = TodayDateFailDecorator(this, goals)
+        todaySuccessDecorator  = TodayDateSuccessDecorator(this,goals)
+        todayDateOnlyDecorator  = TodayDateOnlyDecorator(this,goals)
+        todayLeftDayOnlyDecorator = TodayDateLeftDaySuccessDecorator(this,goals)
+
+        pastFailDecorator  = PastDateFailDecorator(this, goals)
+        pastSuccessDecorator  = PastDateSuccessDecorator(this,goals)
+        pastLeftDaySuccessDecorator = PastDateLeftDaySuccessDecorator(this,goals)
+        pastRigthDaySuccessDecorator = PastDateRigthDaySuccessDecorator(this,goals)
+        pastTwoDaySuccessDecorator = PastDateTwoDaySuccessDecorator(this,goals)
+
+        calendarView.addDecorators(
+                HighlightWeekendsDecorator(),
+
+                dateFailDecorator,
+                dateSuccessDecorator,
+
+                todayDateOnlyDecorator,
+                todayFailDecorator,
+                todaySuccessDecorator,
+                todayLeftDayOnlyDecorator,
+
+                pastFailDecorator,
+                pastSuccessDecorator,
+                pastLeftDaySuccessDecorator,
+                pastRigthDaySuccessDecorator,
+                pastTwoDaySuccessDecorator
+        )
+
         weekButton.setOnClickListener( object : View.OnClickListener{
             override fun onClick(p0: View?) {
                 calendarView.state().edit()
@@ -53,8 +94,25 @@ class MainActivity : HabitsActivity(),OnDateSelectedListener {
     }
 
     override fun onDateSelected(widget: MaterialCalendarView, date: CalendarDay, selected: Boolean) {
-        selectedManyDecorator.addDate(date)
-        //oneDaySelectedDecorator.addDate(date)
+        var goal = goals.get(date);
+
+        if (goal == null){
+            goal = Goal(ResultDay.SUCCESS)
+            goals.put(date,goal)
+        }else{
+           when(goal.result){
+               ResultDay.FAIL -> goal.result = ResultDay.NONE
+               ResultDay.SUCCESS -> goal.result = ResultDay.FAIL
+               ResultDay.NONE -> goal.result = ResultDay.SUCCESS
+           }
+        }
+
+        dateFailDecorator.update(goal!!,date)
+        dateSuccessDecorator.update(goal!!,date)
+        todayFailDecorator.update(goal!!,date)
+        todaySuccessDecorator.update(goal!!,date)
+
+        calendarView.clearSelection();
         calendarView.invalidateDecorators()
     }
 }

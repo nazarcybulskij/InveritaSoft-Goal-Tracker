@@ -7,4 +7,7 @@
     <color name="grey_bit_transparent">#FFE4A1</color>
     <color name="black" >#50000000</color>
 
+    <color name="red_70" >#70FF0000</color>
+    <color name="blue_70" >#700000FF</color>
+
 </resources>

@@ -1,27 +1,28 @@
-package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator
+package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decoratorsold
 
 import android.content.Context
-import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.LayerDrawable
 import android.support.v4.content.ContextCompat
-import android.text.style.RelativeSizeSpan
-import android.text.style.StyleSpan
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import com.prolificinteractive.materialcalendarview.DayViewFacade
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.R
-import java.util.*
+import java.util.HashSet
 
 /**
  * Created by nazarko on 13.02.18.
  */
-class OneDaySelectedDecorator(var context:Context,val dates: HashSet<CalendarDay>): DayViewDecorator {
+class CommentDecorator(var context: Context, val dates: HashSet<CalendarDay>): DayViewDecorator {
 
-    lateinit var drawable: Drawable
-    lateinit var soliddrawable: Drawable
+    lateinit var commentdrawable: Drawable
+
+    lateinit var finalDrawable: LayerDrawable
+
 
     init{
-        drawable = ContextCompat.getDrawable(context, R.drawable.circle_background)
+        commentdrawable = ContextCompat.getDrawable(context,R.drawable.comment)
+        finalDrawable = LayerDrawable(arrayOf(commentdrawable))
     }
 
     override fun shouldDecorate(day: CalendarDay?): Boolean {
@@ -29,7 +30,7 @@ class OneDaySelectedDecorator(var context:Context,val dates: HashSet<CalendarDay
     }
 
     override fun decorate(view: DayViewFacade?) {
-        view?.setSelectionDrawable(drawable)
+        view?.setSelectionDrawable(finalDrawable)
     }
 
     public fun addDate(date:CalendarDay) = dates.add(date)
