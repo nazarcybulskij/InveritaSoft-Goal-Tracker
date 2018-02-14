@@ -2,10 +2,8 @@ package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main
 
 import android.os.Bundle
 import android.view.View
-import com.prolificinteractive.materialcalendarview.CalendarDay
-import com.prolificinteractive.materialcalendarview.CalendarMode
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView
-import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
+import android.widget.Toast
+import com.prolificinteractive.materialcalendarview.*
 import kotlinx.android.synthetic.main.activity_main.*
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.R
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.future.*
@@ -15,7 +13,7 @@ import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.model.ResultDa
 import java.util.*
 import kotlin.collections.HashMap
 
-class MainActivity : HabitsActivity(),OnDateSelectedListener {
+class MainActivity : HabitsActivity(),OnDateSelectedListener, OnDateLongSelectedListener {
 
     lateinit var dateFailDecorator: FutureDateFailDecorator;
     lateinit var dateSuccessDecorator: FutureDateSuccessDecorator;
@@ -31,7 +29,7 @@ class MainActivity : HabitsActivity(),OnDateSelectedListener {
     lateinit var todayDateOnlyDecorator: TodayDateOnlyDecorator;
     lateinit var todayLeftDayOnlyDecorator: TodayDateLeftDaySuccessDecorator;
 
-    var goals = HashMap<CalendarDay,Goal>()
+    var goals = HashMap<CalendarDay, Goal>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,22 +39,22 @@ class MainActivity : HabitsActivity(),OnDateSelectedListener {
 
     private fun initviews() {
         var calendar = Calendar.getInstance();
-        calendarView.currentDate =  CalendarDay.from(calendar.time);
+        calendarView.currentDate = CalendarDay.from(calendar.time);
         calendarView.setOnDateChangedListener(this)
+        calendarView.setOnDateLongClickListener(this)
+        dateFailDecorator = FutureDateFailDecorator(this, goals)
+        dateSuccessDecorator = FutureDateSuccessDecorator(this, goals)
 
-        dateFailDecorator  = FutureDateFailDecorator(this, goals)
-        dateSuccessDecorator  = FutureDateSuccessDecorator(this,goals)
+        todayFailDecorator = TodayDateFailDecorator(this, goals)
+        todaySuccessDecorator = TodayDateSuccessDecorator(this, goals)
+        todayDateOnlyDecorator = TodayDateOnlyDecorator(this, goals)
+        todayLeftDayOnlyDecorator = TodayDateLeftDaySuccessDecorator(this, goals)
 
-        todayFailDecorator  = TodayDateFailDecorator(this, goals)
-        todaySuccessDecorator  = TodayDateSuccessDecorator(this,goals)
-        todayDateOnlyDecorator  = TodayDateOnlyDecorator(this,goals)
-        todayLeftDayOnlyDecorator = TodayDateLeftDaySuccessDecorator(this,goals)
-
-        pastFailDecorator  = PastDateFailDecorator(this, goals)
-        pastSuccessDecorator  = PastDateSuccessDecorator(this,goals)
-        pastLeftDaySuccessDecorator = PastDateLeftDaySuccessDecorator(this,goals)
-        pastRigthDaySuccessDecorator = PastDateRigthDaySuccessDecorator(this,goals)
-        pastTwoDaySuccessDecorator = PastDateTwoDaySuccessDecorator(this,goals)
+        pastFailDecorator = PastDateFailDecorator(this, goals)
+        pastSuccessDecorator = PastDateSuccessDecorator(this, goals)
+        pastLeftDaySuccessDecorator = PastDateLeftDaySuccessDecorator(this, goals)
+        pastRigthDaySuccessDecorator = PastDateRigthDaySuccessDecorator(this, goals)
+        pastTwoDaySuccessDecorator = PastDateTwoDaySuccessDecorator(this, goals)
 
         calendarView.addDecorators(
                 HighlightWeekendsDecorator(),
@@ -76,14 +74,14 @@ class MainActivity : HabitsActivity(),OnDateSelectedListener {
                 pastTwoDaySuccessDecorator
         )
 
-        weekButton.setOnClickListener( object : View.OnClickListener{
+        weekButton.setOnClickListener(object : View.OnClickListener {
             override fun onClick(p0: View?) {
                 calendarView.state().edit()
                         .setCalendarDisplayMode(CalendarMode.WEEKS)
                         .commit()
             }
         });
-        monthButton.setOnClickListener( object : View.OnClickListener{
+        monthButton.setOnClickListener(object : View.OnClickListener {
             override fun onClick(p0: View?) {
                 calendarView.state().edit()
                         .setCalendarDisplayMode(CalendarMode.MONTHS)
@@ -96,23 +94,32 @@ class MainActivity : HabitsActivity(),OnDateSelectedListener {
     override fun onDateSelected(widget: MaterialCalendarView, date: CalendarDay, selected: Boolean) {
         var goal = goals.get(date);
 
-        if (goal == null){
-            goal = Goal(ResultDay.SUCCESS)
-            goals.put(date,goal)
-        }else{
-           when(goal.result){
-               ResultDay.FAIL -> goal.result = ResultDay.NONE
-               ResultDay.SUCCESS -> goal.result = ResultDay.FAIL
-               ResultDay.NONE -> goal.result = ResultDay.SUCCESS
-           }
+        if (goal == null) {
+            goal = Goal(ResultDay.SUCCESS, false)
+            goals.put(date, goal)
+        } else {
+            when (goal.result) {
+                ResultDay.FAIL -> goal.result = ResultDay.NONE
+                ResultDay.SUCCESS -> goal.result = ResultDay.FAIL
+                ResultDay.NONE -> goal.result = ResultDay.SUCCESS
+            }
         }
 
-        dateFailDecorator.update(goal!!,date)
-        dateSuccessDecorator.update(goal!!,date)
-        todayFailDecorator.update(goal!!,date)
-        todaySuccessDecorator.update(goal!!,date)
+        dateFailDecorator.update(goal!!, date)
+        dateSuccessDecorator.update(goal!!, date)
+        todayFailDecorator.update(goal!!, date)
+        todaySuccessDecorator.update(goal!!, date)
 
         calendarView.clearSelection();
         calendarView.invalidateDecorators()
     }
+
+
+
+    override fun onDateLongSelected(widget: MaterialCalendarView, date: CalendarDay) {
+        Toast.makeText(this, date.toString(), Toast.LENGTH_SHORT).show()
+    }
+
+
+
 }

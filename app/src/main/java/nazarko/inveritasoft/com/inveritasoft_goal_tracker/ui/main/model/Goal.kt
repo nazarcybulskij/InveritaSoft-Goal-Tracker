@@ -5,4 +5,4 @@ import com.prolificinteractive.materialcalendarview.CalendarDay
 /**
  * Created by nazarko on 13.02.18.
  */
-data class Goal(var result:ResultDay)
+data class Goal(var result:ResultDay,  var iscomment:Boolean)
