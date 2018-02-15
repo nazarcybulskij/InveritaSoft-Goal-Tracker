@@ -36,7 +36,7 @@ class TodayDateSuccessDecorator(var context: Context, val goalsMap:HashMap<Calen
     override fun shouldDecorate(day: CalendarDay?): Boolean {
         var todayBoolean:Boolean
         todayBoolean = today.equals(day!!)  &&  goalsMap.get(day)?.result == ResultDay.SUCCESS
-        return  todayBoolean ;
+        return  todayBoolean
 
     }
 

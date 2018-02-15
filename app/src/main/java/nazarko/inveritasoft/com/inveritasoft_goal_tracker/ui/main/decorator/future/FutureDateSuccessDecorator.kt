@@ -29,7 +29,7 @@ class FutureDateSuccessDecorator(var context: Context, val goalsMap:HashMap<Cale
     }
 
     override fun shouldDecorate(day: CalendarDay?): Boolean {
-        return  goalsMap.get(day)?.result == ResultDay.SUCCESS && today.isBefore(day!!)
+        return  goalsMap.get(day)?.result == ResultDay.SUCCESS && today.isBefore(day!!) && goalsMap.get(day)?.iscomment ==false
 
     }
 

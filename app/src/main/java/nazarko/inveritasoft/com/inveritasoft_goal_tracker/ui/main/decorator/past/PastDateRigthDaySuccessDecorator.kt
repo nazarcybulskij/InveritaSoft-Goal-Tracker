@@ -38,7 +38,7 @@ class PastDateRigthDaySuccessDecorator(var context: Context, val goalsMap:HashMa
         var nextDate = CalendarDay.from(calendar.time)
         nextBoolean = goalsMap.get(nextDate)?.result == ResultDay.SUCCESS
         todayBoolean = goalsMap.get(day)?.result == ResultDay.SUCCESS && today.isAfter(day!!)
-        return  todayBoolean  && nextBoolean;
+        return  todayBoolean  && nextBoolean && goalsMap.get(day)?.iscomment == false
     }
 
     override fun decorate(view: DayViewFacade?) {

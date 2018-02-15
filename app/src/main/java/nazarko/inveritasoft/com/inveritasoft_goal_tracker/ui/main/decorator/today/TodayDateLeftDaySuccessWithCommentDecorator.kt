@@ -15,10 +15,13 @@ import java.util.*
 /**
  * Created by nazarko on 13.02.18.
  */
-class PastDateLeftDaySuccessDecorator(var context: Context, val goalsMap:HashMap<CalendarDay,Goal>) : DayViewDecorator {
+class TodayDateLeftDaySuccessWithCommentDecorator(var context: Context, val goalsMap:HashMap<CalendarDay,Goal>) : DayViewDecorator {
 
     lateinit var drawable: Drawable
     lateinit var circledrawable: Drawable
+    lateinit var todaydrawable: Drawable
+    lateinit var commentdrawable: Drawable
+
     lateinit var finalDrawable:LayerDrawable
 
     private var today = CalendarDay.today()
@@ -26,8 +29,10 @@ class PastDateLeftDaySuccessDecorator(var context: Context, val goalsMap:HashMap
 
     init{
         drawable = ContextCompat.getDrawable(context, R.drawable.success_circle_background)
+        todaydrawable = ContextCompat.getDrawable(context,R.drawable.today)
         circledrawable = ContextCompat.getDrawable(context,R.drawable.left_day)
-        finalDrawable = LayerDrawable(arrayOf(drawable,circledrawable))
+        commentdrawable = ContextCompat.getDrawable(context, R.drawable.comment)
+        finalDrawable = LayerDrawable(arrayOf(drawable,todaydrawable,circledrawable,commentdrawable))
     }
 
     override fun shouldDecorate(day: CalendarDay?): Boolean {
@@ -37,8 +42,8 @@ class PastDateLeftDaySuccessDecorator(var context: Context, val goalsMap:HashMap
         calendar.add(Calendar.DATE, -1)
         var prevDate = CalendarDay.from(calendar.time)
         prevBoolean = goalsMap.get(prevDate)?.result == ResultDay.SUCCESS && today.isAfter(prevDate!!)
-        todayBoolean = goalsMap.get(day)?.result == ResultDay.SUCCESS && today.isAfter(day!!)
-        return  todayBoolean && prevBoolean &&  goalsMap.get(day)?.iscomment == false
+        todayBoolean = today.equals(day!!)  &&  goalsMap.get(day)?.result == ResultDay.SUCCESS
+        return  todayBoolean && prevBoolean && goalsMap.get(day)?.iscomment == true
     }
 
     override fun decorate(view: DayViewFacade?) {

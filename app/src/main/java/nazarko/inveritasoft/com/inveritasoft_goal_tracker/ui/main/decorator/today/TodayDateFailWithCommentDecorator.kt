@@ -10,35 +10,31 @@ import com.prolificinteractive.materialcalendarview.DayViewFacade
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.R
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.model.Goal
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.model.ResultDay
-import java.util.*
+import java.util.HashSet
 
 /**
  * Created by nazarko on 13.02.18.
  */
-class PastDateLeftDaySuccessDecorator(var context: Context, val goalsMap:HashMap<CalendarDay,Goal>) : DayViewDecorator {
+class TodayDateFailWithCommentDecorator(var context: Context, val goalsMap:HashMap<CalendarDay,Goal> ) : DayViewDecorator {
 
     lateinit var drawable: Drawable
-    lateinit var circledrawable: Drawable
+    lateinit var todaydrawable: Drawable
+    lateinit var commentdrawable: Drawable
+
     lateinit var finalDrawable:LayerDrawable
 
     private var today = CalendarDay.today()
-    private val calendar = Calendar.getInstance()
 
     init{
-        drawable = ContextCompat.getDrawable(context, R.drawable.success_circle_background)
-        circledrawable = ContextCompat.getDrawable(context,R.drawable.left_day)
-        finalDrawable = LayerDrawable(arrayOf(drawable,circledrawable))
+        drawable = ContextCompat.getDrawable(context, R.drawable.fail_circle_background)
+        todaydrawable = ContextCompat.getDrawable(context,R.drawable.today)
+        commentdrawable = ContextCompat.getDrawable(context, R.drawable.comment)
+        finalDrawable = LayerDrawable(arrayOf(drawable,todaydrawable,commentdrawable))
     }
 
     override fun shouldDecorate(day: CalendarDay?): Boolean {
-        var prevBoolean:Boolean
-        var todayBoolean:Boolean
-        calendar.setTime(day?.date)
-        calendar.add(Calendar.DATE, -1)
-        var prevDate = CalendarDay.from(calendar.time)
-        prevBoolean = goalsMap.get(prevDate)?.result == ResultDay.SUCCESS && today.isAfter(prevDate!!)
-        todayBoolean = goalsMap.get(day)?.result == ResultDay.SUCCESS && today.isAfter(day!!)
-        return  todayBoolean && prevBoolean &&  goalsMap.get(day)?.iscomment == false
+        return today.equals(day!!)  && goalsMap.get(day)?.result == ResultDay.FAIL && goalsMap.get(day)?.iscomment == true
+
     }
 
     override fun decorate(view: DayViewFacade?) {
@@ -48,4 +44,6 @@ class PastDateLeftDaySuccessDecorator(var context: Context, val goalsMap:HashMap
     public fun update(goal: Goal,date:CalendarDay) {
         goalsMap.put(date,goal)
     }
+
+
 }

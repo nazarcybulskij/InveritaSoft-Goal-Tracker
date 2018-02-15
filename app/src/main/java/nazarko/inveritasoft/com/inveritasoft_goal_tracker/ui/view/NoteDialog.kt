@@ -12,7 +12,10 @@ import com.prolificinteractive.materialcalendarview.CalendarDay
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.R
 import android.view.*
 import android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
+import android.widget.EditText
 import android.widget.TextView
+import kotlinx.android.synthetic.main.dialog_note.*
+import org.w3c.dom.Comment
 import java.text.SimpleDateFormat
 
 
@@ -23,9 +26,9 @@ class NoteDialog : DialogFragment(){
 
 
     interface NodeDialogListener{
-        fun  cancelComment()
-        fun deleteComment()
-        fun setComment()
+        fun  cancelComment(data:CalendarDay,comment: String)
+        fun deleteComment(data:CalendarDay,comment: String)
+        fun setComment(data:CalendarDay,comment: String)
     }
 
     companion object {
@@ -58,16 +61,19 @@ class NoteDialog : DialogFragment(){
 
         view.findViewById<TextView>(R.id.dateSubtitleText).text =resources.getString(R.string.write_note
         )+ " ${dateFormatDayFormatter.format(date.date)}.";
+
+        val commentEdit =  view.findViewById<EditText>(R.id.commentEdit)
+
         view.findViewById<View>(R.id.cancel).setOnClickListener(View.OnClickListener {
-            listener?.cancelComment()
+            listener?.cancelComment(date,commentEdit.text.trim().toString())
             dismiss()
         })
         view.findViewById<View>(R.id.set).setOnClickListener(View.OnClickListener {
-            listener?.setComment()
+            listener?.setComment(date,commentEdit.text.trim().toString())
             dismiss()
         })
         view.findViewById<View>(R.id.delete).setOnClickListener(View.OnClickListener {
-            listener?.deleteComment()
+            listener?.deleteComment(date,commentEdit.text.trim().toString())
             dismiss()
         })
         return AlertDialog.Builder(activity,R.style.NoteDialogThema)

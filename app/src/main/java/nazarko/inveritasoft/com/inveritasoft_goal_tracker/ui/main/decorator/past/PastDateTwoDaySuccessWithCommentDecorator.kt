@@ -15,9 +15,10 @@ import java.util.*
 /**
  * Created by nazarko on 13.02.18.
  */
-class PastDateLeftDaySuccessDecorator(var context: Context, val goalsMap:HashMap<CalendarDay,Goal>) : DayViewDecorator {
+class PastDateTwoDaySuccessWithCommentDecorator(var context: Context, val goalsMap:HashMap<CalendarDay,Goal>) : DayViewDecorator {
 
     lateinit var drawable: Drawable
+    lateinit var commentdrawable: Drawable
     lateinit var circledrawable: Drawable
     lateinit var finalDrawable:LayerDrawable
 
@@ -26,19 +27,25 @@ class PastDateLeftDaySuccessDecorator(var context: Context, val goalsMap:HashMap
 
     init{
         drawable = ContextCompat.getDrawable(context, R.drawable.success_circle_background)
-        circledrawable = ContextCompat.getDrawable(context,R.drawable.left_day)
-        finalDrawable = LayerDrawable(arrayOf(drawable,circledrawable))
+        circledrawable = ContextCompat.getDrawable(context,R.drawable.two_day)
+        commentdrawable = ContextCompat.getDrawable(context, R.drawable.comment)
+        finalDrawable = LayerDrawable(arrayOf(drawable,circledrawable,commentdrawable))
     }
 
     override fun shouldDecorate(day: CalendarDay?): Boolean {
         var prevBoolean:Boolean
+        var nextBoolean:Boolean
         var todayBoolean:Boolean
         calendar.setTime(day?.date)
         calendar.add(Calendar.DATE, -1)
         var prevDate = CalendarDay.from(calendar.time)
+        calendar.setTime(day?.date)
+        calendar.add(Calendar.DATE, 1)
+        var nextDate = CalendarDay.from(calendar.time)
         prevBoolean = goalsMap.get(prevDate)?.result == ResultDay.SUCCESS && today.isAfter(prevDate!!)
+        nextBoolean = goalsMap.get(nextDate)?.result == ResultDay.SUCCESS
         todayBoolean = goalsMap.get(day)?.result == ResultDay.SUCCESS && today.isAfter(day!!)
-        return  todayBoolean && prevBoolean &&  goalsMap.get(day)?.iscomment == false
+        return  todayBoolean && prevBoolean && nextBoolean  && goalsMap.get(day)?.iscomment == true
     }
 
     override fun decorate(view: DayViewFacade?) {

@@ -41,7 +41,7 @@ class TodayDateLeftDaySuccessDecorator(var context: Context, val goalsMap:HashMa
         var prevDate = CalendarDay.from(calendar.time)
         prevBoolean = goalsMap.get(prevDate)?.result == ResultDay.SUCCESS && today.isAfter(prevDate!!)
         todayBoolean = today.equals(day!!)  &&  goalsMap.get(day)?.result == ResultDay.SUCCESS
-        return  todayBoolean && prevBoolean;
+        return  todayBoolean && prevBoolean
     }
 
     override fun decorate(view: DayViewFacade?) {

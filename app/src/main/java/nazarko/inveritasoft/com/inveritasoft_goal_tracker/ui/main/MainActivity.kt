@@ -14,21 +14,35 @@ import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.view.NoteDialog
 import java.util.*
 import kotlin.collections.HashMap
 
-class MainActivity : HabitsActivity(),OnDateSelectedListener, OnDateLongSelectedListener {
+class MainActivity : HabitsActivity(),OnDateSelectedListener, OnDateLongSelectedListener, NoteDialog.NodeDialogListener {
+
+
 
     lateinit var dateFailDecorator: FutureDateFailDecorator;
     lateinit var dateSuccessDecorator: FutureDateSuccessDecorator;
+    lateinit var dateFailWithCommentDecorator: FutureDateFailWithCommentDecorator;
+    lateinit var dateSuccessWithCommentDecorator: FutureDateSuccessWithCommentDecorator;
+
 
     lateinit var pastFailDecorator: PastDateFailDecorator;
+    lateinit var pastFailWithCommentDecorator: PastDateFailWithCommentDecorator;
     lateinit var pastSuccessDecorator: PastDateSuccessDecorator;
+    lateinit var pastSuccessWithCommentDecorator: PastDateSuccessWithCommentDecorator;
     lateinit var pastLeftDaySuccessDecorator: PastDateLeftDaySuccessDecorator;
+    lateinit var pastLeftDaySuccessWithCommentDecorator: PastDateLeftDaySuccessWithCommentDecorator;
     lateinit var pastRigthDaySuccessDecorator: PastDateRigthDaySuccessDecorator;
+    lateinit var pastRigthDaySuccessWithCommentDecorator: PastDateRigthDaySuccessWithCommentDecorator;
     lateinit var pastTwoDaySuccessDecorator: PastDateTwoDaySuccessDecorator;
+    lateinit var pastTwoDaySuccessWithCommentDecorator: PastDateTwoDaySuccessWithCommentDecorator;
 
     lateinit var todayFailDecorator: TodayDateFailDecorator;
+    lateinit var todayFailWithCommentDecorator: TodayDateFailWithCommentDecorator;
     lateinit var todaySuccessDecorator: TodayDateSuccessDecorator;
+    lateinit var todaySuccessWithCommentDecorator: TodayDateSuccessWithCommentDecorator;
     lateinit var todayDateOnlyDecorator: TodayDateOnlyDecorator;
+    lateinit var todayDateOnlyWithCommentDecorator: TodayDateOnlyWithCommentDecorator;
     lateinit var todayLeftDayOnlyDecorator: TodayDateLeftDaySuccessDecorator;
+    lateinit var todayLeftDayOnlyWithCommentDecorator: TodayDateLeftDaySuccessWithCommentDecorator;
 
     var goals = HashMap<CalendarDay, Goal>()
 
@@ -43,36 +57,59 @@ class MainActivity : HabitsActivity(),OnDateSelectedListener, OnDateLongSelected
         calendarView.currentDate = CalendarDay.from(calendar.time);
         calendarView.setOnDateChangedListener(this)
         calendarView.setOnDateLongClickListener(this)
+
         dateFailDecorator = FutureDateFailDecorator(this, goals)
+        dateFailWithCommentDecorator = FutureDateFailWithCommentDecorator(this, goals)
         dateSuccessDecorator = FutureDateSuccessDecorator(this, goals)
+        dateSuccessWithCommentDecorator = FutureDateSuccessWithCommentDecorator(this, goals)
 
         todayFailDecorator = TodayDateFailDecorator(this, goals)
+        todayFailWithCommentDecorator = TodayDateFailWithCommentDecorator(this, goals)
         todaySuccessDecorator = TodayDateSuccessDecorator(this, goals)
+        todaySuccessWithCommentDecorator = TodayDateSuccessWithCommentDecorator(this, goals)
         todayDateOnlyDecorator = TodayDateOnlyDecorator(this, goals)
+        todayDateOnlyWithCommentDecorator = TodayDateOnlyWithCommentDecorator(this, goals)
         todayLeftDayOnlyDecorator = TodayDateLeftDaySuccessDecorator(this, goals)
+        todayLeftDayOnlyWithCommentDecorator = TodayDateLeftDaySuccessWithCommentDecorator(this, goals)
 
         pastFailDecorator = PastDateFailDecorator(this, goals)
+        pastFailWithCommentDecorator = PastDateFailWithCommentDecorator(this, goals)
         pastSuccessDecorator = PastDateSuccessDecorator(this, goals)
+        pastSuccessWithCommentDecorator = PastDateSuccessWithCommentDecorator(this, goals)
         pastLeftDaySuccessDecorator = PastDateLeftDaySuccessDecorator(this, goals)
+        pastLeftDaySuccessWithCommentDecorator = PastDateLeftDaySuccessWithCommentDecorator(this, goals)
         pastRigthDaySuccessDecorator = PastDateRigthDaySuccessDecorator(this, goals)
+        pastRigthDaySuccessWithCommentDecorator = PastDateRigthDaySuccessWithCommentDecorator(this, goals)
         pastTwoDaySuccessDecorator = PastDateTwoDaySuccessDecorator(this, goals)
+        pastTwoDaySuccessWithCommentDecorator = PastDateTwoDaySuccessWithCommentDecorator(this, goals)
 
         calendarView.addDecorators(
                 HighlightWeekendsDecorator(),
 
                 dateFailDecorator,
+                dateFailWithCommentDecorator,
                 dateSuccessDecorator,
+                dateSuccessWithCommentDecorator,
 
                 todayDateOnlyDecorator,
+                todayDateOnlyWithCommentDecorator,
                 todayFailDecorator,
+                todayFailWithCommentDecorator,
                 todaySuccessDecorator,
+                todaySuccessWithCommentDecorator,
                 todayLeftDayOnlyDecorator,
+                todayLeftDayOnlyWithCommentDecorator,
 
                 pastFailDecorator,
+                pastFailWithCommentDecorator,
                 pastSuccessDecorator,
+                pastSuccessWithCommentDecorator,
                 pastLeftDaySuccessDecorator,
+                pastLeftDaySuccessWithCommentDecorator,
                 pastRigthDaySuccessDecorator,
-                pastTwoDaySuccessDecorator
+                pastRigthDaySuccessWithCommentDecorator,
+                pastTwoDaySuccessDecorator,
+                pastTwoDaySuccessWithCommentDecorator
         )
 
         weekButton.setOnClickListener(object : View.OnClickListener {
@@ -106,12 +143,23 @@ class MainActivity : HabitsActivity(),OnDateSelectedListener, OnDateLongSelected
             }
         }
 
-        dateFailDecorator.update(goal!!, date)
-        dateSuccessDecorator.update(goal!!, date)
-        todayFailDecorator.update(goal!!, date)
-        todaySuccessDecorator.update(goal!!, date)
-
         calendarView.clearSelection();
+        calendarView.invalidateDecorators()
+    }
+
+    override fun cancelComment(data: CalendarDay, comment: String) {
+
+    }
+
+    override fun deleteComment(data: CalendarDay, comment: String) {
+        var goal = goals.get(data);
+        goal?.iscomment = false;
+        calendarView.invalidateDecorators()
+    }
+
+    override fun setComment(data: CalendarDay, comment: String) {
+        var goal = goals.get(data);
+        goal?.iscomment = true;
         calendarView.invalidateDecorators()
     }
 

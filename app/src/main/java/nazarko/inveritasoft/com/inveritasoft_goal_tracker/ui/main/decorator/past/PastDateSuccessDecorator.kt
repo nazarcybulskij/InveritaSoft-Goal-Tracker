@@ -33,7 +33,7 @@ class PastDateSuccessDecorator(var context: Context, val goalsMap:HashMap<Calend
     override fun shouldDecorate(day: CalendarDay?): Boolean {
         var todayBoolean:Boolean
         todayBoolean = goalsMap.get(day)?.result == ResultDay.SUCCESS && today.isAfter(day!!)
-        return  todayBoolean;
+        return  todayBoolean  && goalsMap.get(day)?.iscomment == false
     }
 
     override fun decorate(view: DayViewFacade?) {

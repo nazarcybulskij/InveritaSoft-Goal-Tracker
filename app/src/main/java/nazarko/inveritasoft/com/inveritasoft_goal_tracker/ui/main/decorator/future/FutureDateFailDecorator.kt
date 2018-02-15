@@ -29,7 +29,7 @@ class FutureDateFailDecorator(var context: Context, val goalsMap:HashMap<Calenda
     }
 
     override fun shouldDecorate(day: CalendarDay?): Boolean {
-        return  goalsMap.get(day)?.result == ResultDay.FAIL  && today.isBefore(day!!)
+        return  goalsMap.get(day)?.result == ResultDay.FAIL  && today.isBefore(day!!) && goalsMap.get(day)?.iscomment == false
     }
 
     override fun decorate(view: DayViewFacade?) {
