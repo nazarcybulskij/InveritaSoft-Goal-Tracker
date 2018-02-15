@@ -9,7 +9,6 @@ import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import com.prolificinteractive.materialcalendarview.DayViewFacade
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.R
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.model.Goal
-import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.model.ResultDay
 import java.util.HashMap
 
 /**
