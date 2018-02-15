@@ -29,7 +29,6 @@ class MainViewModel:ViewModel(),MviViewModel<MainIntent,MainViewState> {
 
     private fun compose(): Observable<MainViewState> {
         return mIntentsSubject
-                .compose<MainIntent>(intentFilter)
                 .map(this::actionFromIntent)
                 .compose(MainActionProcessorHolder(SchedulerProvider()).actionProcessor)
                 // Cache each state and pass it to the reducer to create a new state from
@@ -68,6 +67,7 @@ class MainViewModel:ViewModel(),MviViewModel<MainIntent,MainViewState> {
         return when (intent) {
             is MainIntent.InitialIntent -> MainAction.InitialAction("")
             is MainIntent.DataClickIntent -> MainAction.DataClickAction("")
+            is MainIntent.DataLongClickIntent -> MainAction.DataLongClickAction("")
         }
     }
 

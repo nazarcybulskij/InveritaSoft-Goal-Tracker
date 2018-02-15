@@ -62,6 +62,31 @@ class MainActionProcessorHolder(private val schedulerProvider: BaseSchedulerProv
                 }
             }
 
+    private val dateLongTaskProcessor =
+            ObservableTransformer<MainAction.DataLongClickAction, MainResult.DateLongResult> { actions ->
+                actions.flatMap { action ->
+                    Single.just("temp")
+                            // Transform the Single to an Observable to allow emission of multiple
+                            // events down the stream (e.g. the InFlight event)
+                            .toObservable()
+                            // Wrap returned data into an immutable object
+                            .map(MainResult.DateLongResult::Success)
+                            .cast(MainResult.DateLongResult::class.java)
+                            // Wrap any error into an immutable object and pass it down the stream
+                            // without crashing.
+                            // Because errors are data and hence, should just be part of the stream.
+                            .onErrorReturn(MainResult.DateLongResult::Failure)
+                            .subscribeOn(schedulerProvider.io())
+                            .observeOn(schedulerProvider.ui())
+                            // Emit an InFlight event to notify the subscribers (e.g. the UI) we are
+                            // doing work and waiting on a response.
+                            // We emit it after observing on the UI thread to allow the event to be emitted
+                            // on the current frame and avoid jank.
+                            .startWith(MainResult.DateLongResult.InFlight)
+                }
+            }
+
+
 
 
     /**
@@ -84,7 +109,8 @@ class MainActionProcessorHolder(private val schedulerProvider: BaseSchedulerProv
                 actions.publish({ shared ->
                     Observable.merge<MainResult>(
                             shared.ofType(MainAction.InitialAction::class.java).compose(initTaskProcessor),
-                            shared.ofType(MainAction.DataClickAction::class.java).compose(dateTaskProcessor)
+                            shared.ofType(MainAction.DataClickAction::class.java).compose(dateTaskProcessor),
+                            shared.ofType(MainAction.DataLongClickAction::class.java).compose(dateLongTaskProcessor)
                     )
                 })
             }

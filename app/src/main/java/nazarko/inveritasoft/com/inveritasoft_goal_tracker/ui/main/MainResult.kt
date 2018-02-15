@@ -35,4 +35,18 @@ sealed class MainResult:MviResult {
         }
     }
 
+
+    sealed class DateLongResult : MainResult(){
+        data class Success(val str:String) : DateLongResult(){
+            override fun name() ="DateLongResult.Success"
+        }
+        data class Failure(val error: Throwable) : DateLongResult(){
+            override fun name() ="DateLongResult.Failure"
+        }
+        object InFlight : DateLongResult(){
+            override fun name() ="DateLongResult.InFlight"
+        }
+    }
+
+
 }

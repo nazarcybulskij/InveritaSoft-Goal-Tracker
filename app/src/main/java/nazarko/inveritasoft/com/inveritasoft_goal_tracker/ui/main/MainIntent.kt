@@ -7,9 +7,13 @@ import com.example.android.architecture.blueprints.todoapp.mvibase.MviIntent
  */
 
 sealed class MainIntent:MviIntent{
+
     data class InitialIntent(var str:String) : MainIntent()
 
     data class DataClickIntent(var str:String) : MainIntent()
+
+    data class DataLongClickIntent(var str:String) : MainIntent()
+
 }
 
 

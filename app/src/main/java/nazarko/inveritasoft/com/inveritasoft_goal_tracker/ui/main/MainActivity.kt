@@ -12,6 +12,7 @@ import com.example.android.architecture.blueprints.todoapp.mvibase.MviViewState
 import com.prolificinteractive.materialcalendarview.*
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_main.*
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.R
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.future.*
@@ -33,6 +34,12 @@ class MainActivity : HabitsActivity(),
 
     // Used to manage the data flow lifecycle and avoid memory leak.
     private val disposables = CompositeDisposable()
+
+    private val dateClickIntentPublisher = PublishSubject.create<MainIntent.DataClickIntent>()
+    private val dateLongClickIntentPublisher = PublishSubject.create<MainIntent.DataLongClickIntent>()
+
+
+
     private val viewModel: MainViewModel by lazy(LazyThreadSafetyMode.NONE) {
         ViewModelProviders
                 .of(this, HabitsViewModelFactory.getInstance(this))
@@ -196,6 +203,8 @@ class MainActivity : HabitsActivity(),
         }
         calendarView.clearSelection();
         calendarView.invalidateDecorators()
+
+        dateClickIntentPublisher.onNext(MainIntent.DataClickIntent(""))
     }
 
     override fun cancelComment(data: CalendarDay, comment: String) {
@@ -226,17 +235,18 @@ class MainActivity : HabitsActivity(),
 
     override fun onDateLongSelected(widget: MaterialCalendarView, date: CalendarDay) {
         NoteDialog.show(this,date)
+        dateLongClickIntentPublisher.onNext(MainIntent.DataLongClickIntent(""))
     }
 
     override fun intents(): Observable<MainIntent> {
         return Observable.merge(initialIntent(), dataClickIntent(),dataLongClickIntent())
     }
 
-    private fun initialIntent(): Observable<MainIntent.InitialIntent>  = Observable.just(MainIntent.InitialIntent(""))
+    private fun initialIntent():Observable<MainIntent.InitialIntent> = Observable.just(MainIntent.InitialIntent(""))
 
-    private fun dataClickIntent(): Observable<MainIntent.DataClickIntent>  = Observable.just(MainIntent.DataClickIntent(""))
+    private fun dataClickIntent():Observable<MainIntent.DataClickIntent> = dateClickIntentPublisher
 
-    private fun dataLongClickIntent(): Observable<MainIntent.DataClickIntent>  = Observable.just(MainIntent.DataClickIntent(""))
+    private fun dataLongClickIntent():Observable<MainIntent.DataLongClickIntent> = dateLongClickIntentPublisher
 
     override fun render(state: MainViewState) {
         Log.d("TAG", state.str)

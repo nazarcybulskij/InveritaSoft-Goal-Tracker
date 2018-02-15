@@ -9,6 +9,7 @@ import com.example.android.architecture.blueprints.todoapp.mvibase.MviAction
 sealed class MainAction:MviAction{
     data class InitialAction(var str:String) : MainAction()
     data class DataClickAction(var str:String) : MainAction()
+    data class DataLongClickAction(var str:String) : MainAction()
 
 
 }
