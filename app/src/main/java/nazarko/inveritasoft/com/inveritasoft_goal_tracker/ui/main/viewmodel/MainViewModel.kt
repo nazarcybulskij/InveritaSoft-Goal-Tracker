@@ -60,10 +60,7 @@ class MainViewModel:ViewModel(),MviViewModel<MainIntent,MainViewState> {
     private val intentFilter: ObservableTransformer<MainIntent, MainIntent>
         get() = ObservableTransformer { intents ->
             intents.publish { shared ->
-                Observable.merge<MainIntent>(
-                        shared.ofType(MainIntent::class.java),
-                        shared.ofType(MainIntent::class.java)
-                )
+                shared.ofType(MainIntent::class.java)
             }
         }
 

@@ -29,8 +29,4 @@ class NoneWithCommentDecorator(var context: Context, val goalsMap: HashMap<Calen
     override fun decorate(view: DayViewFacade?) {
         view?.setSelectionDrawable(commentdrawable)
     }
-
-    public fun update(goal: Goal,date:CalendarDay) {
-        goalsMap.put(date,goal)
-    }
 }

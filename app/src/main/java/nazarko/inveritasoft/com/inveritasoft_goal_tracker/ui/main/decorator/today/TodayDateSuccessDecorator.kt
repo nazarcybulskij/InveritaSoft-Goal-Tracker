@@ -43,8 +43,4 @@ class TodayDateSuccessDecorator(var context: Context, val goalsMap:HashMap<Calen
     override fun decorate(view: DayViewFacade?) {
         view?.setSelectionDrawable(finalDrawable)
     }
-
-    public fun update(goal: Goal,date:CalendarDay) {
-        goalsMap.put(date,goal)
-    }
 }

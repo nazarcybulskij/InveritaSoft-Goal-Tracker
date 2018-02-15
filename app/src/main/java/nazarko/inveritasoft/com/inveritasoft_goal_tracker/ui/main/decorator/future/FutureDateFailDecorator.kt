@@ -36,9 +36,4 @@ class FutureDateFailDecorator(var context: Context, val goalsMap:HashMap<Calenda
         view?.setSelectionDrawable(finalDrawable)
     }
 
-    public fun update(goal: Goal,date:CalendarDay) {
-        goalsMap.put(date,goal)
-    }
-
-
 }

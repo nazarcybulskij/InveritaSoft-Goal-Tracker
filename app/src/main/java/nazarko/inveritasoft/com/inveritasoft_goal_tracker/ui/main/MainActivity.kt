@@ -1,9 +1,17 @@
 package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
+import com.example.android.architecture.blueprints.todoapp.mvibase.MviIntent
+import com.example.android.architecture.blueprints.todoapp.mvibase.MviView
+import com.example.android.architecture.blueprints.todoapp.mvibase.MviViewModel
+import com.example.android.architecture.blueprints.todoapp.mvibase.MviViewState
 import com.prolificinteractive.materialcalendarview.*
+import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.R
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.future.*
@@ -11,11 +19,26 @@ import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.othe
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.other.NoneWithCommentDecorator
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.model.Goal
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.model.ResultDay
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.viewmodel.MainViewModel
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.view.NoteDialog
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.util.HabitsViewModelFactory
 import java.util.*
 import kotlin.collections.HashMap
 
-class MainActivity : HabitsActivity(),OnDateSelectedListener, OnDateLongSelectedListener, NoteDialog.NodeDialogListener {
+class MainActivity : HabitsActivity(),
+        OnDateSelectedListener,
+        OnDateLongSelectedListener,
+        NoteDialog.NodeDialogListener,
+        MviView<MainIntent, MainViewState> {
+
+    // Used to manage the data flow lifecycle and avoid memory leak.
+    private val disposables = CompositeDisposable()
+    private val viewModel: MainViewModel by lazy(LazyThreadSafetyMode.NONE) {
+        ViewModelProviders
+                .of(this, HabitsViewModelFactory.getInstance(this))
+                .get(MainViewModel::class.java)
+    }
+
 
 
 
@@ -23,7 +46,6 @@ class MainActivity : HabitsActivity(),OnDateSelectedListener, OnDateLongSelected
     lateinit var dateSuccessDecorator: FutureDateSuccessDecorator;
     lateinit var dateFailWithCommentDecorator: FutureDateFailWithCommentDecorator;
     lateinit var dateSuccessWithCommentDecorator: FutureDateSuccessWithCommentDecorator;
-
 
     lateinit var pastFailDecorator: PastDateFailDecorator;
     lateinit var pastFailWithCommentDecorator: PastDateFailWithCommentDecorator;
@@ -51,7 +73,35 @@ class MainActivity : HabitsActivity(),OnDateSelectedListener, OnDateLongSelected
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initviews()
+        bind()
     }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables.dispose()
+    }
+
+    /**
+     * Connect the [MviView] with the [MviViewModel]
+     * We subscribe to the [MviViewModel] before passing it the [MviView]'s [MviIntent]s.
+     * If we were to pass [MviIntent]s to the [MviViewModel] before listening to it,
+     * emitted [MviViewState]s could be lost
+     */
+    private fun bind() {
+        // Subscribe to the ViewModel and call render for every emitted state
+        //disposables.add(viewModel.states().subscribe(this::render))
+
+        disposables.add(viewModel.states().subscribe(
+                { result ->  render(result) },
+                { error -> Log.e("TAG", "{$error.message}")},
+                { Log.d("TAG", "completed") }
+        )
+        )
+        // Pass the UI's intents to the ViewModel
+        viewModel.processIntents(intents())
+    }
+
 
     private fun initviews() {
         var calendar = Calendar.getInstance();
@@ -146,6 +196,8 @@ class MainActivity : HabitsActivity(),OnDateSelectedListener, OnDateLongSelected
         }
         calendarView.clearSelection();
         calendarView.invalidateDecorators()
+
+        initialIntent();
     }
 
     override fun cancelComment(data: CalendarDay, comment: String) {
@@ -176,6 +228,20 @@ class MainActivity : HabitsActivity(),OnDateSelectedListener, OnDateLongSelected
 
     override fun onDateLongSelected(widget: MaterialCalendarView, date: CalendarDay) {
         NoteDialog.show(this,date)
+    }
+
+    override fun intents(): Observable<MainIntent> {
+        return Observable.merge(initialIntent(), dataClickIntent(),dataLongClickIntent())
+    }
+
+    private fun initialIntent(): Observable<MainIntent.InitialIntent>  = Observable.just(MainIntent.InitialIntent(""))
+
+    private fun dataClickIntent(): Observable<MainIntent.InitialIntent>  = Observable.just(MainIntent.InitialIntent(""))
+
+    private fun dataLongClickIntent(): Observable<MainIntent.InitialIntent>  = Observable.just(MainIntent.InitialIntent(""))
+
+    override fun render(state: MainViewState) {
+        calendarView.invalidateDecorators()
     }
 
 

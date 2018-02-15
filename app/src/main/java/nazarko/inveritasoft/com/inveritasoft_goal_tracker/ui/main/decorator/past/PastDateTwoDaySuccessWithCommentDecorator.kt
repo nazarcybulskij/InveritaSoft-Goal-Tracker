@@ -51,8 +51,4 @@ class PastDateTwoDaySuccessWithCommentDecorator(var context: Context, val goalsM
     override fun decorate(view: DayViewFacade?) {
         view?.setSelectionDrawable(finalDrawable)
     }
-
-    public fun update(goal: Goal,date:CalendarDay) {
-        goalsMap.put(date,goal)
-    }
 }

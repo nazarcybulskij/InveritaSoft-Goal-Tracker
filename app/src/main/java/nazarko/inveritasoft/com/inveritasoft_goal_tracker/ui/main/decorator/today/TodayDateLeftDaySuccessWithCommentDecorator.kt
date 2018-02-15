@@ -50,7 +50,4 @@ class TodayDateLeftDaySuccessWithCommentDecorator(var context: Context, val goal
         view?.setSelectionDrawable(finalDrawable)
     }
 
-    public fun update(goal: Goal,date:CalendarDay) {
-        goalsMap.put(date,goal)
-    }
 }

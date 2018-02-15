@@ -57,12 +57,8 @@ class MainActionProcessorHolder(private val schedulerProvider: BaseSchedulerProv
     internal var actionProcessor =
             ObservableTransformer<MainAction, MainResult> { actions ->
                 actions.publish({ shared ->
-                    Observable.merge<MainResult>(
-                            // Match PopulateTasks to populateTaskProcessor
-                            shared.ofType(MainAction.InitialAction::class.java).compose(initTaskProcessor),
-                            // Match CompleteTaskAction to completeTaskProcessor
-                            shared.ofType(MainAction.InitialAction::class.java).compose(initTaskProcessor)
-                    )
+                    shared.ofType(MainAction.InitialAction::class.java).compose(initTaskProcessor)
+                            .cast(MainResult::class.java)
                 })
             }
 

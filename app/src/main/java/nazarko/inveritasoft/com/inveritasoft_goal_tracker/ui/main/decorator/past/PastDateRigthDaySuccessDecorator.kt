@@ -45,7 +45,4 @@ class PastDateRigthDaySuccessDecorator(var context: Context, val goalsMap:HashMa
         view?.setSelectionDrawable(finalDrawable)
     }
 
-    public fun update(goal: Goal,date:CalendarDay) {
-        goalsMap.put(date,goal)
-    }
 }

@@ -44,8 +44,4 @@ class PastDateLeftDaySuccessDecorator(var context: Context, val goalsMap:HashMap
     override fun decorate(view: DayViewFacade?) {
         view?.setSelectionDrawable(finalDrawable)
     }
-
-    public fun update(goal: Goal,date:CalendarDay) {
-        goalsMap.put(date,goal)
-    }
 }

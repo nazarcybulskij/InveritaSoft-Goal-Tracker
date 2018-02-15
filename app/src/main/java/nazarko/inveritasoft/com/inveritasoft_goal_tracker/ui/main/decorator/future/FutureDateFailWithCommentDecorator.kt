@@ -38,9 +38,4 @@ class FutureDateFailWithCommentDecorator(var context: Context, val goalsMap:Hash
         view?.setSelectionDrawable(finalDrawable)
     }
 
-    public fun update(goal: Goal,date:CalendarDay) {
-        goalsMap.put(date,goal)
-    }
-
-
 }
