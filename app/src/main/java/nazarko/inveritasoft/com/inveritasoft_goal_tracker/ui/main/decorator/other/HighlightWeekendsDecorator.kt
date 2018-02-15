@@ -1,4 +1,4 @@
-package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decoratorsold
+package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.other
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable

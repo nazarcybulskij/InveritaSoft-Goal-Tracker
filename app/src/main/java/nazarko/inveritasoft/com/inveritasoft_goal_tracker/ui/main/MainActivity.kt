@@ -7,7 +7,8 @@ import com.prolificinteractive.materialcalendarview.*
 import kotlinx.android.synthetic.main.activity_main.*
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.R
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.future.*
-import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decoratorsold.HighlightWeekendsDecorator
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.other.HighlightWeekendsDecorator
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.other.NoneWithCommentDecorator
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.model.Goal
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.model.ResultDay
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.view.NoteDialog
@@ -85,6 +86,7 @@ class MainActivity : HabitsActivity(),OnDateSelectedListener, OnDateLongSelected
 
         calendarView.addDecorators(
                 HighlightWeekendsDecorator(),
+                NoneWithCommentDecorator(this, goals),
 
                 dateFailDecorator,
                 dateFailWithCommentDecorator,
@@ -142,7 +144,6 @@ class MainActivity : HabitsActivity(),OnDateSelectedListener, OnDateLongSelected
                 ResultDay.NONE -> goal.result = ResultDay.SUCCESS
             }
         }
-
         calendarView.clearSelection();
         calendarView.invalidateDecorators()
     }
@@ -153,13 +154,21 @@ class MainActivity : HabitsActivity(),OnDateSelectedListener, OnDateLongSelected
 
     override fun deleteComment(data: CalendarDay, comment: String) {
         var goal = goals.get(data);
+        if (goal == null) {
+            goal = Goal(ResultDay.NONE, false)
+        }
         goal?.iscomment = false;
+        goals.put(data, goal)
         calendarView.invalidateDecorators()
     }
 
     override fun setComment(data: CalendarDay, comment: String) {
         var goal = goals.get(data);
+        if (goal == null) {
+            goal = Goal(ResultDay.NONE, true)
+        }
         goal?.iscomment = true;
+        goals.put(data, goal)
         calendarView.invalidateDecorators()
     }
 
