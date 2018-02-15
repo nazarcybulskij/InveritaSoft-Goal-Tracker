@@ -60,13 +60,14 @@ class MainViewModel:ViewModel(),MviViewModel<MainIntent,MainViewState> {
     private val intentFilter: ObservableTransformer<MainIntent, MainIntent>
         get() = ObservableTransformer { intents ->
             intents.publish { shared ->
-                shared.ofType(MainIntent::class.java)
+                shared.ofType(MainIntent.InitialIntent::class.java).take(1).cast(MainIntent::class.java)
             }
         }
 
     private fun actionFromIntent(intent: MainIntent): MainAction {
         return when (intent) {
             is MainIntent.InitialIntent -> MainAction.InitialAction("")
+            is MainIntent.DataClickIntent -> MainAction.DataClickAction("")
         }
     }
 
@@ -80,7 +81,7 @@ class MainViewModel:ViewModel(),MviViewModel<MainIntent,MainViewState> {
          */
         private val reducer = BiFunction { previousState: MainViewState, result: MainResult ->
             when (result) {
-                is MainResult -> previousState.copy(str = "")
+                is MainResult -> previousState.copy(result.name())
             }
         }
     }

@@ -38,6 +38,31 @@ class MainActionProcessorHolder(private val schedulerProvider: BaseSchedulerProv
                 }
             }
 
+    private val dateTaskProcessor =
+            ObservableTransformer<MainAction.DataClickAction, MainResult.DateResult> { actions ->
+                actions.flatMap { action ->
+                    Single.just("temp")
+                            // Transform the Single to an Observable to allow emission of multiple
+                            // events down the stream (e.g. the InFlight event)
+                            .toObservable()
+                            // Wrap returned data into an immutable object
+                            .map(MainResult.DateResult::Success)
+                            .cast(MainResult.DateResult::class.java)
+                            // Wrap any error into an immutable object and pass it down the stream
+                            // without crashing.
+                            // Because errors are data and hence, should just be part of the stream.
+                            .onErrorReturn(MainResult.DateResult::Failure)
+                            .subscribeOn(schedulerProvider.io())
+                            .observeOn(schedulerProvider.ui())
+                            // Emit an InFlight event to notify the subscribers (e.g. the UI) we are
+                            // doing work and waiting on a response.
+                            // We emit it after observing on the UI thread to allow the event to be emitted
+                            // on the current frame and avoid jank.
+                            .startWith(MainResult.DateResult.InFlight)
+                }
+            }
+
+
 
     /**
      * Splits the [Observable] to match each type of [MviAction] to
@@ -57,8 +82,10 @@ class MainActionProcessorHolder(private val schedulerProvider: BaseSchedulerProv
     internal var actionProcessor =
             ObservableTransformer<MainAction, MainResult> { actions ->
                 actions.publish({ shared ->
-                    shared.ofType(MainAction.InitialAction::class.java).compose(initTaskProcessor)
-                            .cast(MainResult::class.java)
+                    Observable.merge<MainResult>(
+                            shared.ofType(MainAction.InitialAction::class.java).compose(initTaskProcessor),
+                            shared.ofType(MainAction.DataClickAction::class.java).compose(dateTaskProcessor)
+                    )
                 })
             }
 

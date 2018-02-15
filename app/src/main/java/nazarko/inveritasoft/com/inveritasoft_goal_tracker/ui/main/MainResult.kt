@@ -7,9 +7,32 @@ import com.example.android.architecture.blueprints.todoapp.mvibase.MviResult
  */
 sealed class MainResult:MviResult {
 
+    open fun name():String = "MainResult"
+
+
+
     sealed class InitResult : MainResult(){
-        data class Success(val str:String) : InitResult()
-        data class Failure(val error: Throwable) : InitResult()
-        object InFlight : InitResult()
+        data class Success(val str:String) : InitResult(){
+            override fun name() ="InitResult.Success"
+        }
+        data class Failure(val error: Throwable) : InitResult(){
+            override fun name() ="InitResult.Failure"
+        }
+        object InFlight : InitResult(){
+            override fun name() ="InitResult.InFlight"
+        }
     }
+
+    sealed class DateResult : MainResult(){
+        data class Success(val str:String) : DateResult(){
+            override fun name() ="DateResult.Success"
+        }
+        data class Failure(val error: Throwable) : DateResult(){
+            override fun name() ="DateResult.Failure"
+        }
+        object InFlight : DateResult(){
+            override fun name() ="DateResult.InFlight"
+        }
+    }
+
 }

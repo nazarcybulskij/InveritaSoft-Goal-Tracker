@@ -196,8 +196,6 @@ class MainActivity : HabitsActivity(),
         }
         calendarView.clearSelection();
         calendarView.invalidateDecorators()
-
-        initialIntent();
     }
 
     override fun cancelComment(data: CalendarDay, comment: String) {
@@ -236,12 +234,13 @@ class MainActivity : HabitsActivity(),
 
     private fun initialIntent(): Observable<MainIntent.InitialIntent>  = Observable.just(MainIntent.InitialIntent(""))
 
-    private fun dataClickIntent(): Observable<MainIntent.InitialIntent>  = Observable.just(MainIntent.InitialIntent(""))
+    private fun dataClickIntent(): Observable<MainIntent.DataClickIntent>  = Observable.just(MainIntent.DataClickIntent(""))
 
-    private fun dataLongClickIntent(): Observable<MainIntent.InitialIntent>  = Observable.just(MainIntent.InitialIntent(""))
+    private fun dataLongClickIntent(): Observable<MainIntent.DataClickIntent>  = Observable.just(MainIntent.DataClickIntent(""))
 
     override fun render(state: MainViewState) {
-        calendarView.invalidateDecorators()
+        Log.d("TAG", state.str)
+        //calendarView.invalidateDecorators()
     }
 
 
