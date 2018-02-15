@@ -25,7 +25,6 @@ class TodayDateSuccessWithCommentDecorator(var context: Context, val goalsMap:Ha
     lateinit var finalDrawable:LayerDrawable
 
     private var today = CalendarDay.today()
-    private val calendar = Calendar.getInstance()
 
     init{
         drawable = ContextCompat.getDrawable(context, R.drawable.success_circle_background)

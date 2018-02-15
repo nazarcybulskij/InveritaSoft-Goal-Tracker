@@ -5,4 +5,12 @@ import com.example.android.architecture.blueprints.todoapp.mvibase.MviViewState
 /**
  * Created by nazarko on 15.02.18.
  */
-sealed class MainViewState:MviViewState
+data class MainViewState(val str:String):MviViewState{
+    companion object {
+        fun idle(): MainViewState {
+            return MainViewState(
+                    str = ""
+            )
+        }
+    }
+}

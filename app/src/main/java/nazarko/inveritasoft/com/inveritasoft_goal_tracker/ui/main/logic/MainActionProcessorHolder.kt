@@ -61,10 +61,6 @@ class MainActionProcessorHolder(private val schedulerProvider: BaseSchedulerProv
                             // Match PopulateTasks to populateTaskProcessor
                             shared.ofType(MainAction.InitialAction::class.java).compose(initTaskProcessor),
                             // Match CompleteTaskAction to completeTaskProcessor
-                            shared.ofType(MainAction.InitialAction::class.java).compose(initTaskProcessor),
-                            // Match ActivateTaskAction to activateTaskProcessor
-                            shared.ofType(MainAction.InitialAction::class.java).compose(initTaskProcessor),
-                            // Match DeleteTaskAction to deleteTaskProcessor
                             shared.ofType(MainAction.InitialAction::class.java).compose(initTaskProcessor)
                     )
                 })
