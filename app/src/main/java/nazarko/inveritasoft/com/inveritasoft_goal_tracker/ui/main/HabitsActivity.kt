@@ -7,7 +7,7 @@ import android.widget.Toast
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.HabitsApplication
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.HabitsApplicationComponent
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.R
-import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.BaseActivity
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.base.project.BaseActivity
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.DaggerHabitsActivityComponent
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.HabitsActivityComponent
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.util.Empty
