@@ -13,7 +13,11 @@ sealed class MainIntent:MviIntent{
 
     data class DataClickIntent(var  date: CalendarDay) : MainIntent()
 
-    data class DataLongClickIntent(var str:String) : MainIntent()
+    data class CommentSetIntent(var  date: CalendarDay,var comment:String) : MainIntent()
+
+    data class CommentDeleteIntent(var  date: CalendarDay,var comment:String) : MainIntent()
+
+
 
 }
 

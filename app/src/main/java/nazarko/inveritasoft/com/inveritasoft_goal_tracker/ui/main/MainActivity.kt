@@ -10,6 +10,7 @@ import com.example.android.architecture.blueprints.todoapp.mvibase.MviView
 import com.example.android.architecture.blueprints.todoapp.mvibase.MviViewModel
 import com.example.android.architecture.blueprints.todoapp.mvibase.MviViewState
 import com.prolificinteractive.materialcalendarview.*
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView.SELECTION_MODE_NONE
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
@@ -18,6 +19,7 @@ import nazarko.inveritasoft.com.inveritasoft_goal_tracker.R
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.future.*
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.other.HighlightWeekendsDecorator
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.other.NoneWithCommentDecorator
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.logic.MainActionProcessorHolder
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.model.Goal
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.model.ResultDay
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.viewmodel.MainViewModel
@@ -36,7 +38,8 @@ class MainActivity : HabitsActivity(),
     private val disposables = CompositeDisposable()
 
     private val dateClickIntentPublisher = PublishSubject.create<MainIntent.DataClickIntent>()
-    private val dateLongClickIntentPublisher = PublishSubject.create<MainIntent.DataLongClickIntent>()
+    private val deleteCommentIntentPublisher = PublishSubject.create<MainIntent.CommentDeleteIntent>()
+    private val setCommentIntentPublisher = PublishSubject.create<MainIntent.CommentSetIntent>()
 
 
 
@@ -193,41 +196,42 @@ class MainActivity : HabitsActivity(),
     }
 
     override fun deleteComment(data: CalendarDay, comment: String) {
-//        var goal = goals.get(data);
-//        if (goal == null) {
-//              goal = Goal(ResultDay.NONE, false)
-//              goals.put(data, goal)
-//        }
-//        goal?.iscomment = false;
+        var goal = MainActionProcessorHolder.goals.get(data);
+        if (goal == null) {
+              goal = Goal(ResultDay.NONE, false)
+              MainActionProcessorHolder.goals.put(data, goal)
+        }
+        goal?.iscomment = false;
 
     }
 
     override fun setComment(data: CalendarDay, comment: String) {
-//        var goal = goals.get(data);
-//        if (goal == null) {
-//            goal = Goal(ResultDay.NONE, true)
-//        }
-//        goal?.iscomment = true;
-//        goals.put(data, goal)
-//        calendarView.invalidateDecorators()
+        var goal = MainActionProcessorHolder.goals.get(data);
+        if (goal == null) {
+            goal = Goal(ResultDay.NONE, true)
+            MainActionProcessorHolder.goals.put(data, goal)
+        }
+        goal?.iscomment = true;
+
+        calendarView.invalidateDecorators()
     }
 
 
 
     override fun onDateLongSelected(widget: MaterialCalendarView, date: CalendarDay) {
         NoteDialog.show(this,date)
-        dateLongClickIntentPublisher.onNext(MainIntent.DataLongClickIntent(""))
+   //     dateLongClickIntentPublisher.onNext(MainIntent.DataLongClickIntent(""))
     }
 
     override fun intents(): Observable<MainIntent> {
-        return Observable.merge(initialIntent(), dataClickIntent(),dataLongClickIntent())
+        return Observable.merge(initialIntent(), dateClickIntentPublisher,deleteCommentIntentPublisher,setCommentIntentPublisher)
     }
 
     private fun initialIntent():Observable<MainIntent.InitialIntent> = Observable.just(MainIntent.InitialIntent(""))
 
-    private fun dataClickIntent():Observable<MainIntent.DataClickIntent> = dateClickIntentPublisher
+//    private fun dataClickIntent():Observable<MainIntent.DataClickIntent> = dateClickIntentPublisher
 
-    private fun dataLongClickIntent():Observable<MainIntent.DataLongClickIntent> = dateLongClickIntentPublisher
+//    private fun dataLongClickIntent():Observable<MainIntent.DataLongClickIntent> = dateLongClickIntentPublisher
 
     override fun render(state: MainViewState) {
         Log.d("TAG",state.toString())
@@ -235,8 +239,8 @@ class MainActivity : HabitsActivity(),
             initCalendar(state.goals)
             Log.d("TAG","init")
         }else{
+            calendarView.clearSelection()
             if (!state.loading){
-                calendarView.clearSelection()
                 calendarView.invalidateDecorators()
                 Log.d("TAG","invalidate")
             }

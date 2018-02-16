@@ -2,6 +2,7 @@ package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main
 
 import com.example.android.architecture.blueprints.todoapp.mvibase.MviResult
 import com.prolificinteractive.materialcalendarview.CalendarDay
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.model.Goal
 
 /**
  * Created by nazarko on 15.02.18.
@@ -25,7 +26,7 @@ sealed class MainResult:MviResult {
     }
 
     sealed class DateResult : MainResult(){
-        data class Success(var date: CalendarDay) : DateResult(){
+        data class Success(var goals:HashMap<CalendarDay, Goal>) : DateResult(){
             override fun name() ="DateResult.Success"
         }
         data class Failure(val error: Throwable) : DateResult(){

@@ -2,6 +2,7 @@ package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main
 
 import com.example.android.architecture.blueprints.todoapp.mvibase.MviViewState
 import com.prolificinteractive.materialcalendarview.CalendarDay
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.logic.MainActionProcessorHolder
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.model.Goal
 
 /**
@@ -18,7 +19,7 @@ data class MainViewState(
         fun idle(): MainViewState {
             return MainViewState(
                     name = "idle",
-                    goals = HashMap<CalendarDay,Goal>(),
+                    goals = MainActionProcessorHolder.goals,
                     active = false,
                     loading = false,
                     error = null

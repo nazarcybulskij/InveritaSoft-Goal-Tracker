@@ -68,7 +68,8 @@ class MainViewModel:ViewModel(),MviViewModel<MainIntent,MainViewState> {
         return when (intent) {
             is MainIntent.InitialIntent -> MainAction.InitialAction("")
             is MainIntent.DataClickIntent -> MainAction.DataClickAction(intent.date)
-            is MainIntent.DataLongClickIntent -> MainAction.DataLongClickAction("")
+            is MainIntent.CommentSetIntent -> MainAction.SetCommentAction(intent.date,intent.comment)
+            is MainIntent.CommentDeleteIntent -> MainAction.DeleteCommentAction(intent.date)
         }
     }
 
@@ -88,7 +89,7 @@ class MainViewModel:ViewModel(),MviViewModel<MainIntent,MainViewState> {
                     is MainResult.InitResult.Failure -> previousState.copy(name = result.name(),active = true,error = previousState.error,goals = previousState.goals)
                 }
                 is MainResult.DateResult -> when (result){
-                    is MainResult.DateResult.Success -> previousState.copy(name = result.name(),active = true,loading = false,goals = previousState.goals)
+                    is MainResult.DateResult.Success -> previousState.copy(name = result.name(),active = true,loading = false,goals = result.goals)
                     is MainResult.DateResult.InFlight -> previousState.copy(name = result.name(),active = true,loading = true,goals = previousState.goals)
                     is MainResult.DateResult.Failure -> previousState.copy(name = result.name(),active = true,error = previousState.error,goals = previousState.goals)
                 }

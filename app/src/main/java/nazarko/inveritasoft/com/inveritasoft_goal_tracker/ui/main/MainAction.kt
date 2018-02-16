@@ -8,9 +8,13 @@ import com.prolificinteractive.materialcalendarview.CalendarDay
  */
 
 sealed class MainAction:MviAction{
+
     data class InitialAction(var str:String) : MainAction()
     data class DataClickAction(var  date: CalendarDay) : MainAction()
-    data class DataLongClickAction(var str:String) : MainAction()
+    data class DeleteCommentAction(var  date: CalendarDay) : MainAction()
+    data class SetCommentAction(var  date: CalendarDay,var comment:String) : MainAction()
+
+
 
 
 }

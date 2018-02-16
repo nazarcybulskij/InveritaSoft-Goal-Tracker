@@ -17,13 +17,13 @@ import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.schedulers.Bas
  */
 class MainActionProcessorHolder(private val schedulerProvider: BaseSchedulerProvider) {
 
-
-    var goals = HashMap<CalendarDay, Goal>()
+    companion object {
+        var goals = HashMap<CalendarDay, Goal>()
+    }
 
 
     private fun updateDate(date:CalendarDay):  Single<HashMap<CalendarDay, Goal>>{
         var goal = goals.get(date);
-
         if (goal == null) {
             goal = Goal(ResultDay.SUCCESS, false)
             goals.put(date, goal)
@@ -34,15 +34,11 @@ class MainActionProcessorHolder(private val schedulerProvider: BaseSchedulerProv
                 ResultDay.NONE -> goal.result = ResultDay.SUCCESS
             }
         }
-        return Single.just<HashMap<CalendarDay, Goal>(goal)
+        return Single.just(goals)
     }
 
 
-
-
-
-
-    private val initTaskProcessor =
+    private val initProcessor =
             ObservableTransformer<MainAction.InitialAction, MainResult.InitResult> { actions ->
                 actions.flatMap { action ->
                     Single.just("temp")
@@ -66,10 +62,10 @@ class MainActionProcessorHolder(private val schedulerProvider: BaseSchedulerProv
                 }
             }
 
-    private val dateTaskProcessor =
+    private val dateProcessor =
             ObservableTransformer<MainAction.DataClickAction, MainResult.DateResult> { actions ->
                 actions.flatMap { action ->
-                    Single.just(action.date)
+                        updateDate(action.date)
                             // Transform the Single to an Observable to allow emission of multiple
                             // events down the stream (e.g. the InFlight event)
                             .toObservable()
@@ -90,8 +86,32 @@ class MainActionProcessorHolder(private val schedulerProvider: BaseSchedulerProv
                 }
             }
 
-    private val dateLongTaskProcessor =
-            ObservableTransformer<MainAction.DataLongClickAction, MainResult.DateLongResult> { actions ->
+    private val setCommentProcessor =
+            ObservableTransformer<MainAction.SetCommentAction, MainResult.DateLongResult> { actions ->
+                actions.flatMap { action ->
+                    Single.just("temp")
+                            // Transform the Single to an Observable to allow emission of multiple
+                            // events down the stream (e.g. the InFlight event)
+                            .toObservable()
+                            // Wrap returned data into an immutable object
+                            .map(MainResult.DateLongResult::Success)
+                            .cast(MainResult.DateLongResult::class.java)
+                            // Wrap any error into an immutable object and pass it down the stream
+                            // without crashing.
+                            // Because errors are data and hence, should just be part of the stream.
+                            .onErrorReturn(MainResult.DateLongResult::Failure)
+                            .subscribeOn(schedulerProvider.io())
+                            .observeOn(schedulerProvider.ui())
+                            // Emit an InFlight event to notify the subscribers (e.g. the UI) we are
+                            // doing work and waiting on a response.
+                            // We emit it after observing on the UI thread to allow the event to be emitted
+                            // on the current frame and avoid jank.
+                            .startWith(MainResult.DateLongResult.InFlight)
+                }
+            }
+
+    private val deleteCommentProcessor =
+            ObservableTransformer<MainAction.DeleteCommentAction, MainResult.DateLongResult> { actions ->
                 actions.flatMap { action ->
                     Single.just("temp")
                             // Transform the Single to an Observable to allow emission of multiple
@@ -117,6 +137,8 @@ class MainActionProcessorHolder(private val schedulerProvider: BaseSchedulerProv
 
 
 
+
+
     /**
      * Splits the [Observable] to match each type of [MviAction] to
      * its corresponding business logic processor. Each processor takes a defined [MviAction],
@@ -136,9 +158,10 @@ class MainActionProcessorHolder(private val schedulerProvider: BaseSchedulerProv
             ObservableTransformer<MainAction, MainResult> { actions ->
                 actions.publish({ shared ->
                     Observable.merge<MainResult>(
-                            shared.ofType(MainAction.InitialAction::class.java).compose(initTaskProcessor),
-                            shared.ofType(MainAction.DataClickAction::class.java).compose(dateTaskProcessor),
-                            shared.ofType(MainAction.DataLongClickAction::class.java).compose(dateLongTaskProcessor)
+                            shared.ofType(MainAction.InitialAction::class.java).compose(initProcessor),
+                            shared.ofType(MainAction.DataClickAction::class.java).compose(dateProcessor),
+                            shared.ofType(MainAction.SetCommentAction::class.java).compose(setCommentProcessor),
+                            shared.ofType(MainAction.DeleteCommentAction::class.java).compose(deleteCommentProcessor)
                     )
                 })
             }
