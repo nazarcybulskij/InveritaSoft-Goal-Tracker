@@ -2,17 +2,45 @@ package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.logic
 
 import com.example.android.architecture.blueprints.todoapp.mvibase.MviAction
 import com.example.android.architecture.blueprints.todoapp.mvibase.MviResult
+import com.prolificinteractive.materialcalendarview.CalendarDay
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.Single
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.MainAction
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.MainResult
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.model.Goal
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.model.ResultDay
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.schedulers.BaseSchedulerProvider
 
 /**
  * Created by nazarko on 15.02.18.
  */
 class MainActionProcessorHolder(private val schedulerProvider: BaseSchedulerProvider) {
+
+
+    var goals = HashMap<CalendarDay, Goal>()
+
+
+    private fun updateDate(date:CalendarDay):  Single<HashMap<CalendarDay, Goal>>{
+        var goal = goals.get(date);
+
+        if (goal == null) {
+            goal = Goal(ResultDay.SUCCESS, false)
+            goals.put(date, goal)
+        } else {
+            when (goal.result) {
+                ResultDay.FAIL -> goal.result = ResultDay.NONE
+                ResultDay.SUCCESS -> goal.result = ResultDay.FAIL
+                ResultDay.NONE -> goal.result = ResultDay.SUCCESS
+            }
+        }
+        return Single.just<HashMap<CalendarDay, Goal>(goal)
+    }
+
+
+
+
+
 
     private val initTaskProcessor =
             ObservableTransformer<MainAction.InitialAction, MainResult.InitResult> { actions ->
@@ -41,7 +69,7 @@ class MainActionProcessorHolder(private val schedulerProvider: BaseSchedulerProv
     private val dateTaskProcessor =
             ObservableTransformer<MainAction.DataClickAction, MainResult.DateResult> { actions ->
                 actions.flatMap { action ->
-                    Single.just("temp")
+                    Single.just(action.date)
                             // Transform the Single to an Observable to allow emission of multiple
                             // events down the stream (e.g. the InFlight event)
                             .toObservable()

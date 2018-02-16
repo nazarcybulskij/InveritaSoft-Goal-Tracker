@@ -1,6 +1,7 @@
 package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.viewmodel
 
 import android.arch.lifecycle.ViewModel
+import android.util.Log
 import com.example.android.architecture.blueprints.todoapp.mvibase.MviResult
 import com.example.android.architecture.blueprints.todoapp.mvibase.MviView
 import com.example.android.architecture.blueprints.todoapp.mvibase.MviViewModel
@@ -66,7 +67,7 @@ class MainViewModel:ViewModel(),MviViewModel<MainIntent,MainViewState> {
     private fun actionFromIntent(intent: MainIntent): MainAction {
         return when (intent) {
             is MainIntent.InitialIntent -> MainAction.InitialAction("")
-            is MainIntent.DataClickIntent -> MainAction.DataClickAction("")
+            is MainIntent.DataClickIntent -> MainAction.DataClickAction(intent.date)
             is MainIntent.DataLongClickIntent -> MainAction.DataLongClickAction("")
         }
     }
@@ -81,7 +82,21 @@ class MainViewModel:ViewModel(),MviViewModel<MainIntent,MainViewState> {
          */
         private val reducer = BiFunction { previousState: MainViewState, result: MainResult ->
             when (result) {
-                is MainResult -> previousState.copy(result.name())
+                is MainResult.InitResult -> when (result){
+                    is MainResult.InitResult.Success -> previousState.copy(name = result.name(),active = true,loading = false,goals = previousState.goals)
+                    is MainResult.InitResult.InFlight -> previousState.copy(name = result.name(),active = true,loading = true,goals = previousState.goals)
+                    is MainResult.InitResult.Failure -> previousState.copy(name = result.name(),active = true,error = previousState.error,goals = previousState.goals)
+                }
+                is MainResult.DateResult -> when (result){
+                    is MainResult.DateResult.Success -> previousState.copy(name = result.name(),active = true,loading = false,goals = previousState.goals)
+                    is MainResult.DateResult.InFlight -> previousState.copy(name = result.name(),active = true,loading = true,goals = previousState.goals)
+                    is MainResult.DateResult.Failure -> previousState.copy(name = result.name(),active = true,error = previousState.error,goals = previousState.goals)
+                }
+                is MainResult.DateLongResult -> when (result){
+                    is MainResult.DateLongResult.Success -> previousState.copy(name = result.name(),active = true,loading = false,goals = previousState.goals)
+                    is MainResult.DateLongResult.InFlight -> previousState.copy(name = result.name(),active = true,loading = false,goals = previousState.goals)
+                    is MainResult.DateLongResult.Failure -> previousState.copy(name = result.name(),active = true,loading = false,goals = previousState.goals)
+                }
             }
         }
     }

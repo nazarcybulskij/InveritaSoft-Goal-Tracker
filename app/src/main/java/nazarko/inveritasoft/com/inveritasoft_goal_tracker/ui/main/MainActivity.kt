@@ -74,7 +74,7 @@ class MainActivity : HabitsActivity(),
     lateinit var todayLeftDayOnlyDecorator: TodayDateLeftDaySuccessDecorator;
     lateinit var todayLeftDayOnlyWithCommentDecorator: TodayDateLeftDaySuccessWithCommentDecorator;
 
-    var goals = HashMap<CalendarDay, Goal>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,17 +110,11 @@ class MainActivity : HabitsActivity(),
     }
 
 
-    private fun initviews() {
-        var calendar = Calendar.getInstance();
-        calendarView.currentDate = CalendarDay.from(calendar.time);
-        calendarView.setOnDateChangedListener(this)
-        calendarView.setOnDateLongClickListener(this)
-
+    private fun initCalendar(goals:HashMap<CalendarDay,Goal>){
         dateFailDecorator = FutureDateFailDecorator(this, goals)
         dateFailWithCommentDecorator = FutureDateFailWithCommentDecorator(this, goals)
         dateSuccessDecorator = FutureDateSuccessDecorator(this, goals)
         dateSuccessWithCommentDecorator = FutureDateSuccessWithCommentDecorator(this, goals)
-
         todayFailDecorator = TodayDateFailDecorator(this, goals)
         todayFailWithCommentDecorator = TodayDateFailWithCommentDecorator(this, goals)
         todaySuccessDecorator = TodayDateSuccessDecorator(this, goals)
@@ -129,7 +123,6 @@ class MainActivity : HabitsActivity(),
         todayDateOnlyWithCommentDecorator = TodayDateOnlyWithCommentDecorator(this, goals)
         todayLeftDayOnlyDecorator = TodayDateLeftDaySuccessDecorator(this, goals)
         todayLeftDayOnlyWithCommentDecorator = TodayDateLeftDaySuccessWithCommentDecorator(this, goals)
-
         pastFailDecorator = PastDateFailDecorator(this, goals)
         pastFailWithCommentDecorator = PastDateFailWithCommentDecorator(this, goals)
         pastSuccessDecorator = PastDateSuccessDecorator(this, goals)
@@ -140,16 +133,13 @@ class MainActivity : HabitsActivity(),
         pastRigthDaySuccessWithCommentDecorator = PastDateRigthDaySuccessWithCommentDecorator(this, goals)
         pastTwoDaySuccessDecorator = PastDateTwoDaySuccessDecorator(this, goals)
         pastTwoDaySuccessWithCommentDecorator = PastDateTwoDaySuccessWithCommentDecorator(this, goals)
-
         calendarView.addDecorators(
                 HighlightWeekendsDecorator(),
                 NoneWithCommentDecorator(this, goals),
-
                 dateFailDecorator,
                 dateFailWithCommentDecorator,
                 dateSuccessDecorator,
                 dateSuccessWithCommentDecorator,
-
                 todayDateOnlyDecorator,
                 todayDateOnlyWithCommentDecorator,
                 todayFailDecorator,
@@ -158,7 +148,6 @@ class MainActivity : HabitsActivity(),
                 todaySuccessWithCommentDecorator,
                 todayLeftDayOnlyDecorator,
                 todayLeftDayOnlyWithCommentDecorator,
-
                 pastFailDecorator,
                 pastFailWithCommentDecorator,
                 pastSuccessDecorator,
@@ -170,7 +159,14 @@ class MainActivity : HabitsActivity(),
                 pastTwoDaySuccessDecorator,
                 pastTwoDaySuccessWithCommentDecorator
         )
+    }
 
+
+    private fun initviews() {
+        var calendar = Calendar.getInstance();
+        calendarView.currentDate = CalendarDay.from(calendar.time);
+        calendarView.setOnDateChangedListener(this)
+        calendarView.setOnDateLongClickListener(this)
         weekButton.setOnClickListener(object : View.OnClickListener {
             override fun onClick(p0: View?) {
                 calendarView.state().edit()
@@ -189,22 +185,7 @@ class MainActivity : HabitsActivity(),
     }
 
     override fun onDateSelected(widget: MaterialCalendarView, date: CalendarDay, selected: Boolean) {
-        var goal = goals.get(date);
-
-        if (goal == null) {
-            goal = Goal(ResultDay.SUCCESS, false)
-            goals.put(date, goal)
-        } else {
-            when (goal.result) {
-                ResultDay.FAIL -> goal.result = ResultDay.NONE
-                ResultDay.SUCCESS -> goal.result = ResultDay.FAIL
-                ResultDay.NONE -> goal.result = ResultDay.SUCCESS
-            }
-        }
-        calendarView.clearSelection();
-        calendarView.invalidateDecorators()
-
-        dateClickIntentPublisher.onNext(MainIntent.DataClickIntent(""))
+        dateClickIntentPublisher.onNext(MainIntent.DataClickIntent(date))
     }
 
     override fun cancelComment(data: CalendarDay, comment: String) {
@@ -212,23 +193,23 @@ class MainActivity : HabitsActivity(),
     }
 
     override fun deleteComment(data: CalendarDay, comment: String) {
-        var goal = goals.get(data);
-        if (goal == null) {
-            goal = Goal(ResultDay.NONE, false)
-        }
-        goal?.iscomment = false;
-        goals.put(data, goal)
-        calendarView.invalidateDecorators()
+//        var goal = goals.get(data);
+//        if (goal == null) {
+//              goal = Goal(ResultDay.NONE, false)
+//              goals.put(data, goal)
+//        }
+//        goal?.iscomment = false;
+
     }
 
     override fun setComment(data: CalendarDay, comment: String) {
-        var goal = goals.get(data);
-        if (goal == null) {
-            goal = Goal(ResultDay.NONE, true)
-        }
-        goal?.iscomment = true;
-        goals.put(data, goal)
-        calendarView.invalidateDecorators()
+//        var goal = goals.get(data);
+//        if (goal == null) {
+//            goal = Goal(ResultDay.NONE, true)
+//        }
+//        goal?.iscomment = true;
+//        goals.put(data, goal)
+//        calendarView.invalidateDecorators()
     }
 
 
@@ -249,8 +230,18 @@ class MainActivity : HabitsActivity(),
     private fun dataLongClickIntent():Observable<MainIntent.DataLongClickIntent> = dateLongClickIntentPublisher
 
     override fun render(state: MainViewState) {
-        Log.d("TAG", state.str)
-        //calendarView.invalidateDecorators()
+        Log.d("TAG",state.toString())
+        if (!state.active){
+            initCalendar(state.goals)
+            Log.d("TAG","init")
+        }else{
+            if (!state.loading){
+                calendarView.clearSelection()
+                calendarView.invalidateDecorators()
+                Log.d("TAG","invalidate")
+            }
+        }
+
     }
 
 
