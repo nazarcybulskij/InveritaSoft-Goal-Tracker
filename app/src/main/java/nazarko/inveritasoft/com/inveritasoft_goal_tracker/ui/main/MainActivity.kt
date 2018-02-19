@@ -25,6 +25,7 @@ import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.model.ResultDa
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.viewmodel.MainViewModel
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.view.NoteDialog
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.util.HabitsViewModelFactory
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.util.extensions.bindTo
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -110,6 +111,16 @@ class MainActivity : HabitsActivity(),
         )
         // Pass the UI's intents to the ViewModel
         viewModel.processIntents(intents())
+
+        viewModel.mNavigatesObservable.bindTo(lifecycle).subscribe(
+                { result ->  navigateTo(this,result) },
+                { error -> Log.e("TAG", "{$error.message}")},
+                { Log.d("TAG", "completed") }
+
+        )
+
+
+
     }
 
 
@@ -189,6 +200,7 @@ class MainActivity : HabitsActivity(),
 
     override fun onDateSelected(widget: MaterialCalendarView, date: CalendarDay, selected: Boolean) {
         dateClickIntentPublisher.onNext(MainIntent.DataClickIntent(date))
+
     }
 
     override fun cancelComment(data: CalendarDay, comment: String) {
@@ -229,18 +241,15 @@ class MainActivity : HabitsActivity(),
 
     private fun initialIntent():Observable<MainIntent.InitialIntent> = Observable.just(MainIntent.InitialIntent(""))
 
-//    private fun dataClickIntent():Observable<MainIntent.DataClickIntent> = dateClickIntentPublisher
-
-//    private fun dataLongClickIntent():Observable<MainIntent.DataLongClickIntent> = dateLongClickIntentPublisher
 
     override fun render(state: MainViewState) {
         Log.d("TAG",state.toString())
         if (!state.active){
-            initCalendar(state.goals)
+            calendarView.clearSelection()
             Log.d("TAG","init")
         }else{
-            calendarView.clearSelection()
             if (!state.loading){
+                calendarView.clearSelection()
                 calendarView.invalidateDecorators()
                 Log.d("TAG","invalidate")
             }

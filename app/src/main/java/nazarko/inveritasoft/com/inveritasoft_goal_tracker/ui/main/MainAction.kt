@@ -16,5 +16,10 @@ sealed class MainAction:MviAction{
 
 
 
+    //  navigate Action
+
+    data class ShowCommentDialogNavigator(var  date: CalendarDay,var comment:String) : MviAction
+
+
 
 }

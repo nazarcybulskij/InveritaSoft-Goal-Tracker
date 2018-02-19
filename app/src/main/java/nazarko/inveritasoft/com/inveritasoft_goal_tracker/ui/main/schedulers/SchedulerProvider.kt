@@ -8,6 +8,7 @@ import io.reactivex.schedulers.Schedulers
  * Created by nazarko on 15.02.18.
  */
 class SchedulerProvider : BaseSchedulerProvider {
+
     override fun computation(): Scheduler = Schedulers.computation()
 
     override fun io(): Scheduler = Schedulers.io()

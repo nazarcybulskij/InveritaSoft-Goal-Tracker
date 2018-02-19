@@ -19,14 +19,14 @@ class PastDateFailDecorator(var context: Context, val goalsMap:HashMap<CalendarD
 
     lateinit var drawable: Drawable
 
-    lateinit var finalDrawable:LayerDrawable
+    lateinit var finalDrawable:Drawable
 
     private var today = CalendarDay.today()
 
 
     init{
         drawable = ContextCompat.getDrawable(context, R.drawable.fail_circle_background)
-        finalDrawable = LayerDrawable(arrayOf(drawable))
+        finalDrawable = LayerDrawable(arrayOf(drawable)).mutate()
     }
 
     override fun shouldDecorate(day: CalendarDay?): Boolean {

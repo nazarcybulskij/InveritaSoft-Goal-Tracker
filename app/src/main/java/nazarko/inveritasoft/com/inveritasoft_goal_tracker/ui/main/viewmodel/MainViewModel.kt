@@ -12,6 +12,7 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.*
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.logic.MainActionProcessorHolder
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.navigate.NavigateProcessorHolder
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.schedulers.SchedulerProvider
 
 /**
@@ -21,11 +22,16 @@ class MainViewModel:ViewModel(),MviViewModel<MainIntent,MainViewState> {
 
 
     lateinit var mIntentsSubject : PublishSubject<MainIntent>
+    lateinit var mNavigationSubject : PublishSubject<MainAction>
+
     lateinit var mStatesObservable : Observable<MainViewState>
+    lateinit var mNavigatesObservable : Observable<NavigationTarget>
 
     init{
         mIntentsSubject = PublishSubject.create()
+        mNavigationSubject = PublishSubject.create()
         mStatesObservable = compose()
+        mNavigatesObservable = navigatecompose()
     }
 
     private fun compose(): Observable<MainViewState> {
@@ -36,6 +42,18 @@ class MainViewModel:ViewModel(),MviViewModel<MainIntent,MainViewState> {
                 // the previous cached one and the latest Result emitted from the action processor.
                 // The Scan operator is used here for the caching.
                 .scan(MainViewState.idle(), reducer)
+                // Emit the last one event of the stream on subscription
+                // Useful when a View rebinds to the ViewModel after rotation.
+                .replay(1)
+                // Create the stream on creation without waiting for anyone to subscribe
+                // This allows the stream to stay alive even when the UI disconnects and
+                // match the stream's lifecycle to the ViewModel's one.
+                .autoConnect(0)
+    }
+
+    private fun navigatecompose(): Observable<NavigationTarget> {
+        return mNavigationSubject
+                .compose(NavigateProcessorHolder().actionProcessor)
                 // Emit the last one event of the stream on subscription
                 // Useful when a View rebinds to the ViewModel after rotation.
                 .replay(1)

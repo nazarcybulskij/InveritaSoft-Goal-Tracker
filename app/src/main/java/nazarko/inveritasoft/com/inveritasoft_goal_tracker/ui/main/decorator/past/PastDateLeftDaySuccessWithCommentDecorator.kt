@@ -20,7 +20,7 @@ class PastDateLeftDaySuccessWithCommentDecorator(var context: Context, val goals
     lateinit var drawable: Drawable
     lateinit var circledrawable: Drawable
     lateinit var commentdrawable: Drawable
-    lateinit var finalDrawable:LayerDrawable
+    lateinit var finalDrawable:Drawable
 
     private var today = CalendarDay.today()
     private val calendar = Calendar.getInstance()
@@ -29,7 +29,7 @@ class PastDateLeftDaySuccessWithCommentDecorator(var context: Context, val goals
         drawable = ContextCompat.getDrawable(context, R.drawable.success_circle_background)
         circledrawable = ContextCompat.getDrawable(context,R.drawable.left_day)
         commentdrawable = ContextCompat.getDrawable(context, R.drawable.comment)
-        finalDrawable = LayerDrawable(arrayOf(drawable,circledrawable,commentdrawable))
+        finalDrawable = LayerDrawable(arrayOf(drawable,circledrawable,commentdrawable)).mutate()
     }
 
     override fun shouldDecorate(day: CalendarDay?): Boolean {

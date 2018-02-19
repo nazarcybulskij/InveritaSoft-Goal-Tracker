@@ -20,14 +20,14 @@ class TodayDateOnlyWithCommentDecorator(var context: Context, val goalsMap:HashM
     lateinit var todaydrawable: Drawable
     lateinit var commentdrawable: Drawable
 
-    lateinit var finalDrawable:LayerDrawable
+    lateinit var finalDrawable:Drawable
 
     private var today = CalendarDay.today()
 
     init{
         todaydrawable = ContextCompat.getDrawable(context,R.drawable.today)
         commentdrawable = ContextCompat.getDrawable(context, R.drawable.comment)
-        finalDrawable = LayerDrawable(arrayOf(todaydrawable,commentdrawable))
+        finalDrawable = LayerDrawable(arrayOf(todaydrawable,commentdrawable)).mutate()
     }
 
     override fun shouldDecorate(day: CalendarDay?): Boolean {

@@ -19,7 +19,7 @@ class FutureDateSuccessDecorator(var context: Context, val goalsMap:HashMap<Cale
 
     lateinit var drawable: Drawable
 
-    lateinit var finalDrawable:LayerDrawable
+    lateinit var finalDrawable:Drawable
 
     private var today = CalendarDay.today()
 

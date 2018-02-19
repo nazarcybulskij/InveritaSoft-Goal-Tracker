@@ -20,7 +20,7 @@ class FutureDateSuccessWithCommentDecorator(var context: Context, val goalsMap:H
     lateinit var drawable: Drawable
     lateinit var commentdrawable: Drawable
 
-    lateinit var finalDrawable:LayerDrawable
+    lateinit var finalDrawable:Drawable
 
     private var today = CalendarDay.today()
 

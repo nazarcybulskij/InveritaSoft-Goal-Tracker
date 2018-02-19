@@ -19,7 +19,7 @@ class PastDateSuccessDecorator(var context: Context, val goalsMap:HashMap<Calend
 
     lateinit var drawable: Drawable
     lateinit var circledrawable: Drawable
-    lateinit var finalDrawable:LayerDrawable
+    lateinit var finalDrawable:Drawable
 
     private var today = CalendarDay.today()
     private val calendar = Calendar.getInstance()
@@ -27,7 +27,7 @@ class PastDateSuccessDecorator(var context: Context, val goalsMap:HashMap<Calend
     init{
         drawable = ContextCompat.getDrawable(context, R.drawable.success_circle_background)
         circledrawable = ContextCompat.getDrawable(context,R.drawable.circle_day)
-        finalDrawable = LayerDrawable(arrayOf(drawable,circledrawable))
+        finalDrawable = LayerDrawable(arrayOf(drawable,circledrawable)).mutate()
     }
 
     override fun shouldDecorate(day: CalendarDay?): Boolean {

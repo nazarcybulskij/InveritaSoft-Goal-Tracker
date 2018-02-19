@@ -21,7 +21,7 @@ class TodayDateFailWithCommentDecorator(var context: Context, val goalsMap:HashM
     lateinit var todaydrawable: Drawable
     lateinit var commentdrawable: Drawable
 
-    lateinit var finalDrawable:LayerDrawable
+    lateinit var finalDrawable:Drawable
 
     private var today = CalendarDay.today()
 
@@ -29,7 +29,7 @@ class TodayDateFailWithCommentDecorator(var context: Context, val goalsMap:HashM
         drawable = ContextCompat.getDrawable(context, R.drawable.fail_circle_background)
         todaydrawable = ContextCompat.getDrawable(context,R.drawable.today)
         commentdrawable = ContextCompat.getDrawable(context, R.drawable.comment)
-        finalDrawable = LayerDrawable(arrayOf(drawable,todaydrawable,commentdrawable))
+        finalDrawable = LayerDrawable(arrayOf(drawable,todaydrawable,commentdrawable)).mutate()
     }
 
     override fun shouldDecorate(day: CalendarDay?): Boolean {

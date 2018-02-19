@@ -19,13 +19,13 @@ class TodayDateOnlyDecorator(var context: Context, val goalsMap:HashMap<Calendar
 
     lateinit var todaydrawable: Drawable
 
-    lateinit var finalDrawable:LayerDrawable
+    lateinit var finalDrawable:Drawable
 
     private var today = CalendarDay.today()
 
     init{
         todaydrawable = ContextCompat.getDrawable(context,R.drawable.today)
-        finalDrawable = LayerDrawable(arrayOf(todaydrawable))
+        finalDrawable = LayerDrawable(arrayOf(todaydrawable)).mutate()
     }
 
     override fun shouldDecorate(day: CalendarDay?): Boolean {
