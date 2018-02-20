@@ -42,7 +42,7 @@ class Navigator(private val schedulerProvider: BaseSchedulerProvider) {
 private fun MainActionProcessorHolder.Companion.getGoalFromDate(date: CalendarDay): Goal {
     var goal = goals.get(date);
     if (goal == null) {
-        goal = Goal(ResultDay.NONE, false,null)
+        goal = Goal(ResultDay.NONE, false)
         goals.put(date, goal)
     }
     return goal;
