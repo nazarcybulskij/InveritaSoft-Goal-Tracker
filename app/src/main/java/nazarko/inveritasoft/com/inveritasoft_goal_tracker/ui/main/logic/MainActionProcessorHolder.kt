@@ -6,6 +6,7 @@ import com.prolificinteractive.materialcalendarview.CalendarDay
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.Single
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.CommentResult
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.MainAction
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.MainResult
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.model.Goal
@@ -17,7 +18,7 @@ import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.schedulers.Bas
  */
 class MainActionProcessorHolder(private val schedulerProvider: BaseSchedulerProvider) {
 
-    companion object {
+    companion object  {
         var goals = HashMap<CalendarDay, Goal>()
     }
 
@@ -34,6 +35,31 @@ class MainActionProcessorHolder(private val schedulerProvider: BaseSchedulerProv
                 ResultDay.NONE -> goal.result = ResultDay.SUCCESS
             }
         }
+        return Single.just(goals)
+    }
+
+    private fun deleteComment(date: CalendarDay): Single<HashMap<CalendarDay, Goal>> {
+        var goal = MainActionProcessorHolder.goals.get(date);
+        if (goal == null) {
+            goal = Goal(ResultDay.NONE, false)
+            MainActionProcessorHolder.goals.put(date, goal)
+        }
+        goal?.iscomment = false;
+        return Single.just(goals)
+    }
+
+    private fun cancelComment(): Observable<CommentResult.CancelCommentResult.Success> {
+        return Observable.just(CommentResult.CancelCommentResult.Success())
+    }
+
+    private fun setComment(date: CalendarDay,comment:String): Single<HashMap<CalendarDay, Goal>> {
+        var goal = MainActionProcessorHolder.goals.get(date);
+        if (goal == null) {
+            goal = Goal(ResultDay.NONE, true,comment)
+            MainActionProcessorHolder.goals.put(date, goal)
+        }
+        goal?.comment = comment;
+        goal?.iscomment = true;
         return Single.just(goals)
     }
 
@@ -87,53 +113,61 @@ class MainActionProcessorHolder(private val schedulerProvider: BaseSchedulerProv
             }
 
     private val setCommentProcessor =
-            ObservableTransformer<MainAction.SetCommentAction, MainResult.DateLongResult> { actions ->
+            ObservableTransformer<MainAction.SetCommentAction, CommentResult.SetCommentResult> { actions ->
                 actions.flatMap { action ->
-                    Single.just("temp")
+                    setComment(action.date,action.comment)
                             // Transform the Single to an Observable to allow emission of multiple
                             // events down the stream (e.g. the InFlight event)
                             .toObservable()
                             // Wrap returned data into an immutable object
-                            .map(MainResult.DateLongResult::Success)
-                            .cast(MainResult.DateLongResult::class.java)
+                            .map(CommentResult.SetCommentResult::Success)
+                            .cast(CommentResult.SetCommentResult::class.java)
                             // Wrap any error into an immutable object and pass it down the stream
                             // without crashing.
                             // Because errors are data and hence, should just be part of the stream.
-                            .onErrorReturn(MainResult.DateLongResult::Failure)
+                            .onErrorReturn(CommentResult.SetCommentResult::Failure)
                             .subscribeOn(schedulerProvider.io())
                             .observeOn(schedulerProvider.ui())
                             // Emit an InFlight event to notify the subscribers (e.g. the UI) we are
                             // doing work and waiting on a response.
                             // We emit it after observing on the UI thread to allow the event to be emitted
                             // on the current frame and avoid jank.
-                            .startWith(MainResult.DateLongResult.InFlight)
+                            .startWith(CommentResult.SetCommentResult.InFlight)
                 }
             }
 
     private val deleteCommentProcessor =
-            ObservableTransformer<MainAction.DeleteCommentAction, MainResult.DateLongResult> { actions ->
+            ObservableTransformer<MainAction.DeleteCommentAction, CommentResult.DeleteCommentResult> { actions ->
                 actions.flatMap { action ->
-                    Single.just("temp")
+                    deleteComment(action.date)
                             // Transform the Single to an Observable to allow emission of multiple
                             // events down the stream (e.g. the InFlight event)
                             .toObservable()
                             // Wrap returned data into an immutable object
-                            .map(MainResult.DateLongResult::Success)
-                            .cast(MainResult.DateLongResult::class.java)
+                            .map(CommentResult.DeleteCommentResult::Success)
+                            .cast(CommentResult.DeleteCommentResult::class.java)
                             // Wrap any error into an immutable object and pass it down the stream
                             // without crashing.
                             // Because errors are data and hence, should just be part of the stream.
-                            .onErrorReturn(MainResult.DateLongResult::Failure)
+                            .onErrorReturn(CommentResult.DeleteCommentResult::Failure)
                             .subscribeOn(schedulerProvider.io())
                             .observeOn(schedulerProvider.ui())
                             // Emit an InFlight event to notify the subscribers (e.g. the UI) we are
                             // doing work and waiting on a response.
                             // We emit it after observing on the UI thread to allow the event to be emitted
                             // on the current frame and avoid jank.
-                            .startWith(MainResult.DateLongResult.InFlight)
+                            .startWith(CommentResult.DeleteCommentResult.InFlight)
                 }
             }
 
+    private val cancelCommentProcessor =
+            ObservableTransformer<MainAction.CancelAction, CommentResult.CancelCommentResult> { actions ->
+                actions.flatMap { action ->
+                    cancelComment()
+                            .subscribeOn(schedulerProvider.io())
+                            .observeOn(schedulerProvider.ui())
+                }
+            }
 
 
 
@@ -159,12 +193,24 @@ class MainActionProcessorHolder(private val schedulerProvider: BaseSchedulerProv
                 actions.publish({ shared ->
                     Observable.merge<MainResult>(
                             shared.ofType(MainAction.InitialAction::class.java).compose(initProcessor),
-                            shared.ofType(MainAction.DataClickAction::class.java).compose(dateProcessor),
-                            shared.ofType(MainAction.SetCommentAction::class.java).compose(setCommentProcessor),
-                            shared.ofType(MainAction.DeleteCommentAction::class.java).compose(deleteCommentProcessor)
+                            shared.ofType(MainAction.DataClickAction::class.java).compose(dateProcessor)
+
                     )
                 })
             }
+
+
+    internal var commentProcessor =
+            ObservableTransformer<MainAction, CommentResult> { actions ->
+                actions.publish({ shared ->
+                    Observable.merge<CommentResult>(
+                            shared.ofType(MainAction.SetCommentAction::class.java).compose(setCommentProcessor),
+                            shared.ofType(MainAction.DeleteCommentAction::class.java).compose(deleteCommentProcessor),
+                            shared.ofType(MainAction.CancelAction::class.java).compose(cancelCommentProcessor)
+                    )
+                })
+            }
+
 
 
 

@@ -17,6 +17,9 @@ sealed class MainIntent:MviIntent{
 
     data class CommentDeleteIntent(var  date: CalendarDay,var comment:String) : MainIntent()
 
+    class CancelCommentIntent() : MainIntent()
+
+
 
 
 }

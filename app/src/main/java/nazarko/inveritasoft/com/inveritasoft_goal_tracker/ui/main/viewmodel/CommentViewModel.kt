@@ -1,5 +1,6 @@
 package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.viewmodel
 
+import android.arch.lifecycle.ViewModel
 import com.example.android.architecture.blueprints.todoapp.mvibase.MviViewModel
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -11,7 +12,7 @@ import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.schedulers.Sch
 /**
  * Created by nazarko on 19.02.18.
  */
-class CommentViewModel: MviViewModel<MainIntent, CommentViewState> {
+class CommentViewModel: ViewModel(), MviViewModel<MainIntent, CommentViewState> {
 
     lateinit var mIntentsSubject : PublishSubject<MainIntent>
     lateinit var mStatesObservable : Observable<CommentViewState>
@@ -48,7 +49,7 @@ class CommentViewModel: MviViewModel<MainIntent, CommentViewState> {
         return when (intent) {
             is MainIntent.CommentSetIntent -> MainAction.SetCommentAction(intent.date,intent.comment)
             is MainIntent.CommentDeleteIntent -> MainAction.DeleteCommentAction(intent.date)
-            else  -> MainAction.InitialAction("")
+            else -> MainAction.CancelAction()
 
         }
     }
@@ -64,15 +65,17 @@ class CommentViewModel: MviViewModel<MainIntent, CommentViewState> {
         private val reducer = BiFunction { previousState: CommentViewState, result: CommentResult ->
             when (result) {
                 is CommentResult.DeleteCommentResult -> when (result){
-                    is CommentResult.DeleteCommentResult.Success -> previousState.copy(name = result.name(),active = true,loading = false,goals = result.goals)
-                    is CommentResult.DeleteCommentResult.InFlight -> previousState.copy(name = result.name(),active = true,loading = true,goals = previousState.goals)
-                    is CommentResult.DeleteCommentResult.Failure -> previousState.copy(name = result.name(),active = true,error = previousState.error,goals = previousState.goals)
+                    is CommentResult.DeleteCommentResult.Success -> previousState.copy(name = result.name(),delete = true,loading = false,goals = result.goals)
+                    is CommentResult.DeleteCommentResult.InFlight -> previousState.copy(name = result.name(),delete = false,loading = true,goals = previousState.goals)
+                    is CommentResult.DeleteCommentResult.Failure -> previousState.copy(name = result.name(),delete = false,error = previousState.error,goals = previousState.goals)
                 }
                 is CommentResult.SetCommentResult -> when (result){
-                    is CommentResult.SetCommentResult.Success -> previousState.copy(name = result.name(),active = true,loading = false,goals = result.goals)
-                    is CommentResult.SetCommentResult.InFlight -> previousState.copy(name = result.name(),active = true,loading = true,goals = previousState.goals)
-                    is CommentResult.SetCommentResult.Failure -> previousState.copy(name = result.name(),active = true,error = previousState.error,goals = previousState.goals)
+                    is CommentResult.SetCommentResult.Success -> previousState.copy(name = result.name(),set = true,loading = false,goals = result.goals)
+                    is CommentResult.SetCommentResult.InFlight -> previousState.copy(name = result.name(),set = false,loading = true,goals = previousState.goals)
+                    is CommentResult.SetCommentResult.Failure -> previousState.copy(name = result.name(),set = false,error = previousState.error,goals = previousState.goals)
                 }
+
+                else ->   previousState.copy(name = result.name(),cancel = true)
             }
         }
     }

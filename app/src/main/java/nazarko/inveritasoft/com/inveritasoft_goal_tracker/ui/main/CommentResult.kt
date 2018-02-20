@@ -36,6 +36,12 @@ sealed class CommentResult: MviResult {
         }
     }
 
+    sealed class CancelCommentResult : CommentResult(){
+        class Success() : CancelCommentResult(){
+            override fun name() ="CancelCommentResult.Success"
+        }
+    }
+
 
 
 }

@@ -11,8 +11,6 @@ sealed class MainResult:MviResult {
 
     open fun name():String = "MainResult"
 
-
-
     sealed class InitResult : MainResult(){
         data class Success(val str:String) : InitResult(){
             override fun name() ="InitResult.Success"
@@ -36,19 +34,5 @@ sealed class MainResult:MviResult {
             override fun name() ="DateResult.InFlight"
         }
     }
-
-
-    sealed class DateLongResult : MainResult(){
-        data class Success(val str:String) : DateLongResult(){
-            override fun name() ="DateLongResult.Success"
-        }
-        data class Failure(val error: Throwable) : DateLongResult(){
-            override fun name() ="DateLongResult.Failure"
-        }
-        object InFlight : DateLongResult(){
-            override fun name() ="DateLongResult.InFlight"
-        }
-    }
-
 
 }

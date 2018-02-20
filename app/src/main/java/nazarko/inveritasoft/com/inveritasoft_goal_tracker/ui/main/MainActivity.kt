@@ -4,13 +4,11 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import com.example.android.architecture.blueprints.todoapp.mvibase.MviIntent
 import com.example.android.architecture.blueprints.todoapp.mvibase.MviView
 import com.example.android.architecture.blueprints.todoapp.mvibase.MviViewModel
 import com.example.android.architecture.blueprints.todoapp.mvibase.MviViewState
 import com.prolificinteractive.materialcalendarview.*
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView.SELECTION_MODE_NONE
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
@@ -38,8 +36,11 @@ class MainActivity : HabitsActivity(),
     private val disposables = CompositeDisposable()
 
     private val dateClickIntentPublisher = PublishSubject.create<MainIntent.DataClickIntent>()
-    private val deleteCommentIntentPublisher = PublishSubject.create<MainIntent.CommentDeleteIntent>()
-    private val setCommentIntentPublisher = PublishSubject.create<MainIntent.CommentSetIntent>()
+
+    private val showCommentDialogPublisher = PublishSubject.create<MainAction.ShowCommentDialogAction>()
+
+
+
 
 
 
@@ -108,9 +109,20 @@ class MainActivity : HabitsActivity(),
                 { Log.d("TAG", "completed") }
         )
         )
+
+        disposables.add(viewModel.navigates().subscribe(
+                { result ->  navigateTo(result) },
+                { error -> Log.e("TAG", "{$error.message}")},
+                { Log.d("TAG", "completed") }
+        )
+        )
+
         // Pass the UI's intents to the ViewModel
         viewModel.processIntents(intents())
+        viewModel.processNavigate(navigate())
     }
+
+
 
 
     private fun initCalendar(goals:HashMap<CalendarDay,Goal>){
@@ -191,47 +203,36 @@ class MainActivity : HabitsActivity(),
         dateClickIntentPublisher.onNext(MainIntent.DataClickIntent(date))
     }
 
-    override fun cancelComment(data: CalendarDay, comment: String) {
+    override fun cancelComment(data: CalendarDay) {
 
     }
 
     override fun deleteComment(data: CalendarDay, comment: String) {
-        var goal = MainActionProcessorHolder.goals.get(data);
-        if (goal == null) {
-              goal = Goal(ResultDay.NONE, false)
-              MainActionProcessorHolder.goals.put(data, goal)
-        }
-        goal?.iscomment = false;
-
+        calendarView.invalidateDecorators()
     }
 
     override fun setComment(data: CalendarDay, comment: String) {
-        var goal = MainActionProcessorHolder.goals.get(data);
-        if (goal == null) {
-            goal = Goal(ResultDay.NONE, true)
-            MainActionProcessorHolder.goals.put(data, goal)
-        }
-        goal?.iscomment = true;
-
         calendarView.invalidateDecorators()
     }
 
 
 
     override fun onDateLongSelected(widget: MaterialCalendarView, date: CalendarDay) {
-        NoteDialog.show(this,date)
-   //     dateLongClickIntentPublisher.onNext(MainIntent.DataLongClickIntent(""))
+        showCommentDialogPublisher.onNext(MainAction.ShowCommentDialogAction(date))
     }
 
     override fun intents(): Observable<MainIntent> {
-        return Observable.merge(initialIntent(), dateClickIntentPublisher,deleteCommentIntentPublisher,setCommentIntentPublisher)
+        return Observable.merge(initialIntent(), dateClickIntentPublisher)
     }
+
+     fun navigate(): Observable<MainAction> {
+        return  showCommentDialogPublisher.cast(MainAction::class.java)
+     }
+
 
     private fun initialIntent():Observable<MainIntent.InitialIntent> = Observable.just(MainIntent.InitialIntent(""))
 
-//    private fun dataClickIntent():Observable<MainIntent.DataClickIntent> = dateClickIntentPublisher
 
-//    private fun dataLongClickIntent():Observable<MainIntent.DataLongClickIntent> = dateLongClickIntentPublisher
 
     override fun render(state: MainViewState) {
         Log.d("TAG",state.toString())
@@ -246,6 +247,12 @@ class MainActivity : HabitsActivity(),
             }
         }
 
+    }
+
+    private fun navigateTo(result: NavigationTarget) {
+        if (result is NavigationTarget.ShowCommentDialog){
+            NoteDialog.show(this,result.data,result.goal)
+        }
     }
 
 

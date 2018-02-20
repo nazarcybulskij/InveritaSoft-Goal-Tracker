@@ -11,9 +11,11 @@ import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.model.Goal
 
 
 data class CommentViewState(
-        val name:String,
+        val name:String = "",
         var goals:HashMap<CalendarDay, Goal>,
-        val active: Boolean,
+        var delete:Boolean,
+        var set:Boolean,
+        var cancel:Boolean,
         val loading: Boolean,
         val error: Throwable?
 ): MviViewState {
@@ -22,7 +24,9 @@ data class CommentViewState(
             return CommentViewState(
                     name = "idle",
                     goals = MainActionProcessorHolder.goals,
-                    active = false,
+                    delete = false,
+                    set = false,
+                    cancel = false,
                     loading = false,
                     error = null
             )

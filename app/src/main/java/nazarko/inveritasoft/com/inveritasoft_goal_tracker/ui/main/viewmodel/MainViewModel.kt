@@ -12,6 +12,7 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.*
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.logic.MainActionProcessorHolder
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.logic.Navigator
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.schedulers.SchedulerProvider
 
 /**
@@ -23,9 +24,16 @@ class MainViewModel:ViewModel(),MviViewModel<MainIntent,MainViewState> {
     lateinit var mIntentsSubject : PublishSubject<MainIntent>
     lateinit var mStatesObservable : Observable<MainViewState>
 
+
+    lateinit var mNavigateSubject : PublishSubject<MainAction>
+    lateinit var mNavigateObservable : Observable<NavigationTarget>
+
+
     init{
         mIntentsSubject = PublishSubject.create()
         mStatesObservable = compose()
+        mNavigateSubject = PublishSubject.create()
+        mNavigateObservable = navigatecompose()
     }
 
     private fun compose(): Observable<MainViewState> {
@@ -45,13 +53,33 @@ class MainViewModel:ViewModel(),MviViewModel<MainIntent,MainViewState> {
                 .autoConnect(0)
     }
 
+    private fun navigatecompose(): Observable<NavigationTarget> {
+        return mNavigateSubject
+                .compose(Navigator(SchedulerProvider()).actionProcessor)
+                // Emit the last one event of the stream on subscription
+                // Useful when a View rebinds to the ViewModel after rotation.
+                .replay(1)
+                // Create the stream on creation without waiting for anyone to subscribe
+                // This allows the stream to stay alive even when the UI disconnects and
+                // match the stream's lifecycle to the ViewModel's one.
+                .autoConnect(0)
+
+    }
+
 
     override fun processIntents(intents: Observable<MainIntent>) {
         intents.subscribe(mIntentsSubject)
     }
 
+    public fun processNavigate(intents: Observable<MainAction>) {
+        intents.subscribe(mNavigateSubject)
+    }
+
     override fun states(): Observable<MainViewState> =
         mStatesObservable;
+
+     public fun navigates(): Observable<NavigationTarget> =
+             mNavigateObservable;
 
     /**
      * take only the first ever InitialIntent and all intents of other types
@@ -68,8 +96,9 @@ class MainViewModel:ViewModel(),MviViewModel<MainIntent,MainViewState> {
         return when (intent) {
             is MainIntent.InitialIntent -> MainAction.InitialAction("")
             is MainIntent.DataClickIntent -> MainAction.DataClickAction(intent.date)
-            is MainIntent.CommentSetIntent -> MainAction.SetCommentAction(intent.date,intent.comment)
-            is MainIntent.CommentDeleteIntent -> MainAction.DeleteCommentAction(intent.date)
+            else  -> MainAction.InitialAction("")
+//            is MainIntent.CommentSetIntent -> MainAction.SetCommentAction(intent.date,intent.comment)
+//            is MainIntent.CommentDeleteIntent -> MainAction.DeleteCommentAction(intent.date)
         }
     }
 
@@ -93,11 +122,11 @@ class MainViewModel:ViewModel(),MviViewModel<MainIntent,MainViewState> {
                     is MainResult.DateResult.InFlight -> previousState.copy(name = result.name(),active = true,loading = true,goals = previousState.goals)
                     is MainResult.DateResult.Failure -> previousState.copy(name = result.name(),active = true,error = previousState.error,goals = previousState.goals)
                 }
-                is MainResult.DateLongResult -> when (result){
-                    is MainResult.DateLongResult.Success -> previousState.copy(name = result.name(),active = true,loading = false,goals = previousState.goals)
-                    is MainResult.DateLongResult.InFlight -> previousState.copy(name = result.name(),active = true,loading = false,goals = previousState.goals)
-                    is MainResult.DateLongResult.Failure -> previousState.copy(name = result.name(),active = true,loading = false,goals = previousState.goals)
-                }
+//                is MainResult.DateLongResult -> when (result){
+//                    is MainResult.DateLongResult.Success -> previousState.copy(name = result.name(),active = true,loading = false,goals = previousState.goals)
+//                    is MainResult.DateLongResult.InFlight -> previousState.copy(name = result.name(),active = true,loading = false,goals = previousState.goals)
+//                    is MainResult.DateLongResult.Failure -> previousState.copy(name = result.name(),active = true,loading = false,goals = previousState.goals)
+//                }
             }
         }
     }

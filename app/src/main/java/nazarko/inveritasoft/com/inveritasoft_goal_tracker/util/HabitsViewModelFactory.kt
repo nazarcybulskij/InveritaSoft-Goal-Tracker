@@ -3,6 +3,7 @@ package nazarko.inveritasoft.com.inveritasoft_goal_tracker.util
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.viewmodel.CommentViewModel
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.viewmodel.MainViewModel
 
 /**
@@ -15,6 +16,9 @@ class HabitsViewModelFactory private constructor(
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass == MainViewModel::class.java) {
             return  MainViewModel() as T
+        }
+        if (modelClass == CommentViewModel::class.java) {
+            return  CommentViewModel() as T
         }
         throw IllegalArgumentException("unknown model class " + modelClass)
     }
