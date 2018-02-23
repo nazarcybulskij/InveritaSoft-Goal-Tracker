@@ -36,7 +36,7 @@ import static com.prolificinteractive.materialcalendarview.MaterialCalendarView.
 class DayView extends CheckedTextView {
 
     private CalendarDay date;
-    private int selectionColor = Color.GRAY;
+    private int selectionColor = Color.TRANSPARENT;
 
     private final int fadeTime;
     private Drawable customBackground = null;
