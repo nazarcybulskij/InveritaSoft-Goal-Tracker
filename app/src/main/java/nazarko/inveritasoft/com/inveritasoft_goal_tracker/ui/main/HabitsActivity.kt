@@ -1,5 +1,6 @@
 package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -10,6 +11,7 @@ import nazarko.inveritasoft.com.inveritasoft_goal_tracker.R
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.base.project.BaseActivity
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.DaggerHabitsActivityComponent
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.HabitsActivityComponent
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.createUIhabbits.CreateHabbitActivity
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.util.Empty
 import javax.inject.Inject
 
@@ -89,7 +91,7 @@ abstract class HabitsActivity : BaseActivity() {
     }
 
     private fun addHabit() {
-        Toast.makeText(this,"add",Toast.LENGTH_SHORT).show()
+        startActivity(Intent(this, CreateHabbitActivity::class.java));
     }
 
 

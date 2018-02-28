@@ -240,7 +240,6 @@ class MainActivity : HabitsActivity(),
             initCalendar(state.goals)
             Log.d("TAG","init")
         }else{
-            calendarView.clearSelection()
             if (!state.loading){
                 calendarView.invalidateDecorators()
                 Log.d("TAG","invalidate")

@@ -15,4 +15,14 @@
     <string name="set">set</string>
     <string name="delete">delete</string>
     <string name="write_note">Write a note for</string>
+    <string name="title_activity_create_habbit">CreateHabbitActivity</string>
+    <string name="menu_save">SAVE</string>
+    <string name="menu_cancel">CANCEL</string>
+    <string name="demo">demo</string>
+    <string name="give_name">Give this habit  a name</string>
+    <string name="give_reasons">Reasons</string>
+    <string name="give_description">Give it a description (optinal)</string>
+    <string name="habit">Habit</string>
+    <string name="description">Description</string>
+    <string name="reason">Reason</string>
 </resources>

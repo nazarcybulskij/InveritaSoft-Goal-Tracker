@@ -1,0 +1,77 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/nameTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/give_name"
+            style="@style/TextView.Style"
+            />
+
+        <EditText
+            android:id="@+id/nameEditView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/habit"
+            style="@style/EditText.Style"
+            />
+
+        <TextView
+            android:id="@+id/descriptionTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/give_description"
+            style="@style/TextView.Style"
+            />
+
+        <EditText
+            android:id="@+id/descriptionEditView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/description"
+            style="@style/EditText.Style"
+            />
+
+        <TextView
+            android:id="@+id/reasonnTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/give_reasons"
+            style="@style/TextView.Style"
+            />
+
+
+        <EditText
+            android:id="@+id/reasonEditText1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/reason"
+            style="@style/EditText.Style"
+            />
+
+        <EditText
+            android:id="@+id/reasonEditText2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/reason"
+            style="@style/EditText.Style"
+            />
+
+        <EditText
+            android:id="@+id/reasonEditText3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/reason"
+            style="@style/EditText.Style"
+            />
+
+
+</LinearLayout>
+
+
+

@@ -54,15 +54,9 @@ class MainViewModel:ViewModel(),MviViewModel<MainIntent,MainViewState> {
     }
 
     private fun navigatecompose(): Observable<NavigationTarget> {
-        return mNavigateSubject
-                .compose(Navigator(SchedulerProvider()).actionProcessor)
-                // Emit the last one event of the stream on subscription
-                // Useful when a View rebinds to the ViewModel after rotation.
-                .replay(1)
-                // Create the stream on creation without waiting for anyone to subscribe
-                // This allows the stream to stay alive even when the UI disconnects and
-                // match the stream's lifecycle to the ViewModel's one.
-                .autoConnect(0)
+        return mNavigateSubject.compose(Navigator(SchedulerProvider()).actionProcessor);
+
+
 
     }
 
