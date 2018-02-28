@@ -1,4 +1,16 @@
 <resources>
+
+    <string-array name="days">
+        <item>@string/Su</item>
+        <item>@string/Mo</item>
+        <item>@string/Tu</item>
+        <item>@string/We</item>
+        <item>@string/Th</item>
+        <item>@string/Fr</item>
+        <item>@string/Sa</item>
+    </string-array>
+
+
     <string name="app_name">InveritaSoft-Goal-Tracker</string>
     <string name="menu_add">menu add</string>
     <string name="menu_edit">menu edit</string>
@@ -26,4 +38,14 @@
     <string name="description">Description</string>
     <string name="reason">Reason</string>
     <string name="ok">ok</string>
+
+
+    <string name="Su">Su</string>
+    <string name="Mo">Mo</string>
+    <string name="Tu">Tu</string>
+    <string name="We">We</string>
+    <string name="Th">Th</string>
+    <string name="Fr">Fr</string>
+    <string name="Sa">Sa</string>
+
 </resources>
