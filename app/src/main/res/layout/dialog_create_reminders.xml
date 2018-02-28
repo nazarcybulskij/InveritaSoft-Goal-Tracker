@@ -34,10 +34,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/Su"
-                android:layout_gravity="center"
-                android:textAllCaps="true"/>
+                android:layout_gravity="center" />
 
             <CheckBox
+                android:tag="@string/tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -55,9 +55,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/Mo"
-                android:layout_gravity="center"
-                android:textAllCaps="true"/>
+                android:layout_gravity="center" />
             <CheckBox
+                android:tag="@string/tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -75,10 +75,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/Tu"
-                android:layout_gravity="center"
-                android:textAllCaps="true"/>
+                android:layout_gravity="center" />
 
             <CheckBox
+                android:tag="@string/tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -96,10 +96,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/We"
-                android:layout_gravity="center"
-                android:textAllCaps="true"/>
+                android:layout_gravity="center" />
 
             <CheckBox
+                android:tag="@string/tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -117,9 +117,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/Th"
-                android:layout_gravity="center"
-                android:textAllCaps="true"/>
+                android:layout_gravity="center" />
             <CheckBox
+                android:tag="@string/tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -137,9 +137,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/Fr"
-                android:layout_gravity="center"
-                android:textAllCaps="true"/>
+                android:layout_gravity="center" />
             <CheckBox
+                android:tag="@string/tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -157,9 +157,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/Sa"
-                android:layout_gravity="center"
-                android:textAllCaps="true"/>
+                android:layout_gravity="center" />
             <CheckBox
+                android:tag="@string/tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

@@ -2,15 +2,12 @@ package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.createUIhabbi
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
 import android.support.v4.view.ViewPager
 import android.view.Menu
 import android.view.MenuItem
-import com.prolificinteractive.materialcalendarview.CalendarDay
 import kotlinx.android.synthetic.main.activity_create_habbit.*
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.R
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.base.project.BaseActivity
-import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.createUIhabbits.CreatePagerAdapter
 
 /**
  * Created by nazarko on 23.02.18.
@@ -39,9 +36,10 @@ class CreateHabbitActivity:BaseActivity() {
                     fab.hide()
             }
         })
-        val shareViewModel = ViewModelProviders.of(this).get(FabClickShareViewModel::class.java)
+
+        val shareViewModel = ViewModelProviders.of(this).get(CreateHabbitShareViewModel::class.java)
         fab.setOnClickListener({
-            shareViewModel.click.value = Unit;
+            shareViewModel.clickFab.value = Unit;
         })
 
     }

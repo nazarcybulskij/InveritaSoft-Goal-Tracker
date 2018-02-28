@@ -47,5 +47,6 @@
     <string name="Th">Th</string>
     <string name="Fr">Fr</string>
     <string name="Sa">Sa</string>
+    <string name="tag">tag</string>
 
 </resources>

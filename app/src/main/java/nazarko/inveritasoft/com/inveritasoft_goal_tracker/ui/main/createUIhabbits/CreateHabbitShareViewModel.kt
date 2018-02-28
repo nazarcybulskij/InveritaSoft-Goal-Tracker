@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModel
 /**
  * Created by nazarko on 28.02.18.
  */
-class FabClickShareViewModel:ViewModel() {
-    var click = MutableLiveData<Unit>()
+class CreateHabbitShareViewModel :ViewModel() {
+    var clickFab = MutableLiveData<Unit>()
+    var createReminder = MutableLiveData<UserDto>()
 }
