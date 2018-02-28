@@ -112,7 +112,6 @@ class NoteDialog : DialogFragment(), MviView<MainIntent, CommentViewState> {
 
         view.findViewById<View>(R.id.set).setOnClickListener(View.OnClickListener {
             setCommentIntentPublisher.onNext(MainIntent.CommentSetIntent(date, commentEdit.text.trim().toString()))
-
         })
         view.findViewById<View>(R.id.delete).setOnClickListener(View.OnClickListener {
             deleteCommentIntentPublisher.onNext(MainIntent.CommentDeleteIntent(date, commentEdit.text.trim().toString()))

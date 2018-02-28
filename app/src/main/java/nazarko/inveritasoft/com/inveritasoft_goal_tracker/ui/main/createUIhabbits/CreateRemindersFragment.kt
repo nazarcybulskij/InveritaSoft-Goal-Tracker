@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.R
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.view.NoteDialog
 
 /**
  * Created by nazarko on 27.02.18.
@@ -32,9 +33,8 @@ class CreateRemindersFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val shareViewModel = ViewModelProviders.of(activity).get(FabClickShareViewModel::class.java)
         shareViewModel.click.observe(this, Observer {
-            Toast.makeText(activity,"fab",Toast.LENGTH_SHORT).show()
+            CreateRemindersDialog.show(activity)
         })
-
     }
 
 

@@ -37,6 +37,15 @@
         <item name="android:windowAnimationStyle">@style/DialogThema</item>
     </style>
 
+    <style name="CreateDialogThema" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:windowAnimationStyle">@style/DialogThema</item>
+    </style>
+
     <style name="DialogThema">
         <item name="android:windowEnterAnimation">@anim/anim_in</item>
         <item name="android:windowExitAnimation">@anim/anim_out</item>
