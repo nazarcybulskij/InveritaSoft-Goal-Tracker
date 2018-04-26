@@ -59,11 +59,11 @@ class CreateHabbitActivity:BaseActivity() {
     }
 
     private fun save() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+       onBackPressed()
     }
 
     private fun cancel() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        onBackPressed()
     }
 
 }
