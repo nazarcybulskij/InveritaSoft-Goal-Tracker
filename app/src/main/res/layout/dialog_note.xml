@@ -31,7 +31,8 @@
        android:id="@+id/commentEdit"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-       android:textSize="@dimen/text_size_title"/>
+       android:textSize="@dimen/text_size_title"
+       android:inputType="text"/>
 
    <LinearLayout
        android:paddingTop="@dimen/padding_top"

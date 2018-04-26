@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/InveritaSoftGoalTracker.iml" filepath="$PROJECT_DIR$/InveritaSoftGoalTracker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/InveritaSoft-Goal-Tracker.iml" filepath="$PROJECT_DIR$/InveritaSoft-Goal-Tracker.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/calendar_view/calendar_view.iml" filepath="$PROJECT_DIR$/calendar_view/calendar_view.iml" />
     </modules>

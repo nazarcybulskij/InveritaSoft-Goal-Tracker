@@ -36,6 +36,7 @@
         android:layout_alignParentRight="true"
         app:useCompatPadding="true"
         app:borderWidth="@dimen/fab_border_width"
-        app:fabSize="normal" />
+        app:fabSize="normal"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

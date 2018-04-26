@@ -1,4 +1,4 @@
-package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.future
+package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.past
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -17,20 +17,19 @@ import java.util.*
  */
 class PastDateFailDecorator(var context: Context, val goalsMap:HashMap<CalendarDay,Goal> ) : DayViewDecorator {
 
-    lateinit var drawable: Drawable
+    val drawable: Drawable = ContextCompat.getDrawable(context, R.drawable.fail_circle_background)
 
-    lateinit var finalDrawable:LayerDrawable
+    val finalDrawable:LayerDrawable
 
-    private var today = CalendarDay.today()
+    private val today = CalendarDay.today()
 
 
     init{
-        drawable = ContextCompat.getDrawable(context, R.drawable.fail_circle_background)
         finalDrawable = LayerDrawable(arrayOf(drawable))
     }
 
     override fun shouldDecorate(day: CalendarDay?): Boolean {
-        return  goalsMap.get(day)?.result == ResultDay.FAIL && today.isAfter(day!!) && goalsMap.get(day)?.iscomment == false
+        return  goalsMap[day]?.result == ResultDay.FAIL && today.isAfter(day!!) && goalsMap[day]?.iscomment == false
     }
 
     override fun decorate(view: DayViewFacade?) {

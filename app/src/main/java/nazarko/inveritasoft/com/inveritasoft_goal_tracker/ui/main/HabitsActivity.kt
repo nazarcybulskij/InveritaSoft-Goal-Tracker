@@ -20,11 +20,11 @@ import javax.inject.Inject
  */
 abstract class HabitsActivity : BaseActivity() {
 
-    lateinit var component: HabitsActivityComponent
-    lateinit var appComponent: HabitsApplicationComponent
+    private lateinit var component: HabitsActivityComponent
+    private lateinit var appComponent: HabitsApplicationComponent
 
     @Inject
-    lateinit var empty:Empty;
+    lateinit var empty:Empty
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,7 +91,7 @@ abstract class HabitsActivity : BaseActivity() {
     }
 
     private fun addHabit() {
-        startActivity(Intent(this, CreateHabbitActivity::class.java));
+        startActivity(Intent(this, CreateHabbitActivity::class.java))
     }
 
 

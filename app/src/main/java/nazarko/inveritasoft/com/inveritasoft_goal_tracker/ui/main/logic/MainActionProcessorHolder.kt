@@ -1,7 +1,7 @@
 package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.logic
 
-import com.example.android.architecture.blueprints.todoapp.mvibase.MviAction
-import com.example.android.architecture.blueprints.todoapp.mvibase.MviResult
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.base.mvi.MviAction
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.base.mvi.MviResult
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
@@ -24,7 +24,7 @@ class MainActionProcessorHolder(private val schedulerProvider: BaseSchedulerProv
 
 
     private fun updateDate(date:CalendarDay):  Single<HashMap<CalendarDay, Goal>>{
-        var goal = goals.get(date);
+        var goal = goals[date]
         if (goal == null) {
             goal = Goal(ResultDay.SUCCESS, false)
             goals.put(date, goal)
@@ -39,12 +39,12 @@ class MainActionProcessorHolder(private val schedulerProvider: BaseSchedulerProv
     }
 
     private fun deleteComment(date: CalendarDay): Single<HashMap<CalendarDay, Goal>> {
-        var goal = MainActionProcessorHolder.goals.get(date);
+        var goal = MainActionProcessorHolder.goals[date]
         if (goal == null) {
             goal = Goal(ResultDay.NONE, false)
             MainActionProcessorHolder.goals.put(date, goal)
         }
-        goal?.iscomment = false;
+        goal.iscomment = false
         return Single.just(goals)
     }
 
@@ -53,13 +53,13 @@ class MainActionProcessorHolder(private val schedulerProvider: BaseSchedulerProv
     }
 
     private fun setComment(date: CalendarDay,comment:String): Single<HashMap<CalendarDay, Goal>> {
-        var goal = MainActionProcessorHolder.goals.get(date);
+        var goal = MainActionProcessorHolder.goals[date]
         if (goal == null) {
             goal = Goal(ResultDay.NONE, true,comment)
             MainActionProcessorHolder.goals.put(date, goal)
         }
-        goal?.comment = comment;
-        goal?.iscomment = true;
+        goal.comment = comment
+        goal.iscomment = true
         return Single.just(goals)
     }
 

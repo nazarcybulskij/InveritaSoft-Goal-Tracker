@@ -1,6 +1,6 @@
 package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main
 
-import com.example.android.architecture.blueprints.todoapp.mvibase.MviResult
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.base.mvi.MviResult
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.model.Goal
 
@@ -37,7 +37,7 @@ sealed class CommentResult: MviResult {
     }
 
     sealed class CancelCommentResult : CommentResult(){
-        class Success() : CancelCommentResult(){
+        class Success : CancelCommentResult(){
             override fun name() ="CancelCommentResult.Success"
         }
     }

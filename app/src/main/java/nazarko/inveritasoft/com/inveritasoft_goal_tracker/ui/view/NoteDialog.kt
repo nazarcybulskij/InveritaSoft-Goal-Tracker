@@ -1,7 +1,6 @@
 package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.view
 
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.arch.lifecycle.ViewModelProviders
@@ -16,21 +15,19 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.TextView
-import com.example.android.architecture.blueprints.todoapp.mvibase.MviView
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.base.mvi.MviView
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.dialog_note.*
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.R
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.CommentViewState
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.MainIntent
-import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.MainViewState
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.model.Goal
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.viewmodel.CommentViewModel
-import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.viewmodel.MainViewModel
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.util.HabitsViewModelFactory
 import java.text.SimpleDateFormat
+import java.util.*
 
 
 /**
@@ -42,9 +39,9 @@ class NoteDialog : DialogFragment(), MviView<MainIntent, CommentViewState> {
     private val cancelCommentIntentPublisher = PublishSubject.create<MainIntent.CancelCommentIntent>()
     private val setCommentIntentPublisher = PublishSubject.create<MainIntent.CommentSetIntent>()
 
-    lateinit var date : CalendarDay;
-    lateinit var goal : Goal;
-    lateinit var commentEdit : TextView
+    lateinit var date : CalendarDay
+    lateinit var goal : Goal
+    private lateinit var commentEdit : TextView
 
 
     interface NodeDialogListener {
@@ -65,7 +62,7 @@ class NoteDialog : DialogFragment(), MviView<MainIntent, CommentViewState> {
     private val disposables = CompositeDisposable()
 
     companion object {
-        val TAG = "NoteDialog"
+        private val TAG = "NoteDialog"
         val BUNDLE_DIALOG_DATE = "bundle:date"
         val BUNDLE_DIALOG_GOAL = "bundle:goal"
 
@@ -95,34 +92,33 @@ class NoteDialog : DialogFragment(), MviView<MainIntent, CommentViewState> {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val view = activity.layoutInflater.inflate(R.layout.dialog_note, null)
-        date = arguments.getParcelable(NoteDialog.BUNDLE_DIALOG_DATE) as CalendarDay
-        goal = arguments.getParcelable(NoteDialog.BUNDLE_DIALOG_GOAL) as Goal
-        var dateFormatDayFormatter = SimpleDateFormat("dd MMM yyyy")
+        date = arguments.getParcelable(NoteDialog.BUNDLE_DIALOG_DATE)
+        goal = arguments.getParcelable(NoteDialog.BUNDLE_DIALOG_GOAL)
+        val dateFormatDayFormatter = SimpleDateFormat("dd MMM yyyy", Locale.US)
 
-        view.findViewById<TextView>(R.id.dateSubtitleText).text = resources.getString(R.string.write_note
-        ) + " ${dateFormatDayFormatter.format(date.date)}.";
+        view.findViewById<TextView>(R.id.dateSubtitleText).text =  resources.getString(R.string.write_note) + " ${dateFormatDayFormatter.format(date.date)}."
         commentEdit = view.findViewById<EditText>(R.id.commentEdit)
 
         commentEdit.append(goal.comment)
 
 
-        view.findViewById<View>(R.id.cancel).setOnClickListener(View.OnClickListener {
+        view.findViewById<View>(R.id.cancel).setOnClickListener {
             cancelCommentIntentPublisher.onNext(MainIntent.CancelCommentIntent())
-        })
+        }
 
-        view.findViewById<View>(R.id.set).setOnClickListener(View.OnClickListener {
+        view.findViewById<View>(R.id.set).setOnClickListener {
             setCommentIntentPublisher.onNext(MainIntent.CommentSetIntent(date, commentEdit.text.trim().toString()))
-        })
-        view.findViewById<View>(R.id.delete).setOnClickListener(View.OnClickListener {
+        }
+        view.findViewById<View>(R.id.delete).setOnClickListener   {
             deleteCommentIntentPublisher.onNext(MainIntent.CommentDeleteIntent(date, commentEdit.text.trim().toString()))
-        })
+        }
         return AlertDialog.Builder(activity, R.style.NoteDialogThema)
                 .setView(view)
                 .create()
                 .apply {
                     setCanceledOnTouchOutside(false)
                     window.setGravity(Gravity.TOP)
-                    window.requestFeature(Window.FEATURE_NO_TITLE);
+                    window.requestFeature(Window.FEATURE_NO_TITLE)
                     window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
                     val params = window.attributes
                     params.y = 100

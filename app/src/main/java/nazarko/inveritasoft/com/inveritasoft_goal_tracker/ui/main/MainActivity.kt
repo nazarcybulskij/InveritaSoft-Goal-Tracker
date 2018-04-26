@@ -3,28 +3,29 @@ package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import com.example.android.architecture.blueprints.todoapp.mvibase.MviIntent
-import com.example.android.architecture.blueprints.todoapp.mvibase.MviView
-import com.example.android.architecture.blueprints.todoapp.mvibase.MviViewModel
-import com.example.android.architecture.blueprints.todoapp.mvibase.MviViewState
 import com.prolificinteractive.materialcalendarview.*
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_main.*
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.R
-import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.future.*
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.base.mvi.MviIntent
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.base.mvi.MviView
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.base.mvi.MviViewModel
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.base.mvi.MviViewState
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.future.FutureDateFailDecorator
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.future.FutureDateFailWithCommentDecorator
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.future.FutureDateSuccessDecorator
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.future.FutureDateSuccessWithCommentDecorator
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.other.HighlightWeekendsDecorator
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.other.NoneWithCommentDecorator
-import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.logic.MainActionProcessorHolder
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.past.*
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.today.*
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.model.Goal
-import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.model.ResultDay
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.viewmodel.MainViewModel
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.view.NoteDialog
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.util.HabitsViewModelFactory
 import java.util.*
-import kotlin.collections.HashMap
 
 class MainActivity : HabitsActivity(),
         OnDateSelectedListener,
@@ -53,31 +54,30 @@ class MainActivity : HabitsActivity(),
 
 
 
-    lateinit var dateFailDecorator: FutureDateFailDecorator;
-    lateinit var dateSuccessDecorator: FutureDateSuccessDecorator;
-    lateinit var dateFailWithCommentDecorator: FutureDateFailWithCommentDecorator;
-    lateinit var dateSuccessWithCommentDecorator: FutureDateSuccessWithCommentDecorator;
+    private lateinit var dateFailDecorator: FutureDateFailDecorator
+    private lateinit var dateSuccessDecorator: FutureDateSuccessDecorator
+    private lateinit var dateFailWithCommentDecorator: FutureDateFailWithCommentDecorator
+    private lateinit var dateSuccessWithCommentDecorator: FutureDateSuccessWithCommentDecorator
 
-    lateinit var pastFailDecorator: PastDateFailDecorator;
-    lateinit var pastFailWithCommentDecorator: PastDateFailWithCommentDecorator;
-    lateinit var pastSuccessDecorator: PastDateSuccessDecorator;
-    lateinit var pastSuccessWithCommentDecorator: PastDateSuccessWithCommentDecorator;
-    lateinit var pastLeftDaySuccessDecorator: PastDateLeftDaySuccessDecorator;
-    lateinit var pastLeftDaySuccessWithCommentDecorator: PastDateLeftDaySuccessWithCommentDecorator;
-    lateinit var pastRigthDaySuccessDecorator: PastDateRigthDaySuccessDecorator;
-    lateinit var pastRigthDaySuccessWithCommentDecorator: PastDateRigthDaySuccessWithCommentDecorator;
-    lateinit var pastTwoDaySuccessDecorator: PastDateTwoDaySuccessDecorator;
-    lateinit var pastTwoDaySuccessWithCommentDecorator: PastDateTwoDaySuccessWithCommentDecorator;
+    private lateinit var pastFailDecorator: PastDateFailDecorator
+    private lateinit var pastFailWithCommentDecorator: PastDateFailWithCommentDecorator
+    private lateinit var pastSuccessDecorator: PastDateSuccessDecorator
+    private lateinit var pastSuccessWithCommentDecorator: PastDateSuccessWithCommentDecorator
+    private lateinit var pastLeftDaySuccessDecorator: PastDateLeftDaySuccessDecorator
+    private lateinit var pastLeftDaySuccessWithCommentDecorator: PastDateLeftDaySuccessWithCommentDecorator
+    private lateinit var pastRigthDaySuccessDecorator: PastDateRigthDaySuccessDecorator
+    private lateinit var pastRigthDaySuccessWithCommentDecorator: PastDateRigthDaySuccessWithCommentDecorator
+    private lateinit var pastTwoDaySuccessDecorator: PastDateTwoDaySuccessDecorator
+    private lateinit var pastTwoDaySuccessWithCommentDecorator: PastDateTwoDaySuccessWithCommentDecorator
 
-    lateinit var todayFailDecorator: TodayDateFailDecorator;
-    lateinit var todayFailWithCommentDecorator: TodayDateFailWithCommentDecorator;
-    lateinit var todaySuccessDecorator: TodayDateSuccessDecorator;
-    lateinit var todaySuccessWithCommentDecorator: TodayDateSuccessWithCommentDecorator;
-    lateinit var todayDateOnlyDecorator: TodayDateOnlyDecorator;
-    lateinit var todayDateOnlyWithCommentDecorator: TodayDateOnlyWithCommentDecorator;
-    lateinit var todayLeftDayOnlyDecorator: TodayDateLeftDaySuccessDecorator;
-    lateinit var todayLeftDayOnlyWithCommentDecorator: TodayDateLeftDaySuccessWithCommentDecorator;
-
+    private lateinit var todayFailDecorator: TodayDateFailDecorator
+    private lateinit var todayFailWithCommentDecorator: TodayDateFailWithCommentDecorator
+    private lateinit var todaySuccessDecorator: TodayDateSuccessDecorator
+    private lateinit var todaySuccessWithCommentDecorator: TodayDateSuccessWithCommentDecorator
+    private lateinit var todayDateOnlyDecorator: TodayDateOnlyDecorator
+    private lateinit var todayDateOnlyWithCommentDecorator: TodayDateOnlyWithCommentDecorator
+    private lateinit var todayLeftDayOnlyDecorator: TodayDateLeftDaySuccessDecorator
+    private lateinit var todayLeftDayOnlyWithCommentDecorator: TodayDateLeftDaySuccessWithCommentDecorator
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -178,24 +178,20 @@ class MainActivity : HabitsActivity(),
 
 
     private fun initviews() {
-        var calendar = Calendar.getInstance();
-        calendarView.currentDate = CalendarDay.from(calendar.time);
+        val calendar = Calendar.getInstance()
+        calendarView.currentDate = CalendarDay.from(calendar.time)
         calendarView.setOnDateChangedListener(this)
         calendarView.setOnDateLongClickListener(this)
-        weekButton.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(p0: View?) {
-                calendarView.state().edit()
-                        .setCalendarDisplayMode(CalendarMode.WEEKS)
-                        .commit()
-            }
-        });
-        monthButton.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(p0: View?) {
-                calendarView.state().edit()
-                        .setCalendarDisplayMode(CalendarMode.MONTHS)
-                        .commit()
-            }
-        });
+        weekButton.setOnClickListener {
+            calendarView.state().edit()
+                    .setCalendarDisplayMode(CalendarMode.WEEKS)
+                    .commit()
+        }
+        monthButton.setOnClickListener {
+            calendarView.state().edit()
+                    .setCalendarDisplayMode(CalendarMode.MONTHS)
+                    .commit()
+        }
         calendarView.setDateTextAppearance(R.style.CalendarDateTextAppearance)
     }
 
@@ -225,7 +221,7 @@ class MainActivity : HabitsActivity(),
         return Observable.merge(initialIntent(), dateClickIntentPublisher)
     }
 
-     fun navigate(): Observable<MainAction> {
+     private fun navigate(): Observable<MainAction> {
         return  showCommentDialogPublisher.cast(MainAction::class.java)
      }
 

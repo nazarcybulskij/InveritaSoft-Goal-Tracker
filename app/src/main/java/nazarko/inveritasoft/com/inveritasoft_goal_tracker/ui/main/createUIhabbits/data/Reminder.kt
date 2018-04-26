@@ -2,10 +2,7 @@ package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.createUIhabbi
 
 import java.util.*
 
-/**
- * Created by nazarko on 28.02.18.
- */
-data class Reminder(var date:Date,var days:List<DayOfWeek> )
+data class Reminder(var date:Date,var days:List<DayOfWeek>)
 
 enum class DayOfWeek(val dayNumber: Int) {
     SUNDAY(1) ,

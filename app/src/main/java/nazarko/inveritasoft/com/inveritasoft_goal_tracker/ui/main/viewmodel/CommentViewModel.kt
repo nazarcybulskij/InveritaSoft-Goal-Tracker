@@ -1,11 +1,14 @@
 package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.viewmodel
 
 import android.arch.lifecycle.ViewModel
-import com.example.android.architecture.blueprints.todoapp.mvibase.MviViewModel
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
-import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.*
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.base.mvi.MviViewModel
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.CommentResult
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.CommentViewState
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.MainAction
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.MainIntent
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.logic.MainActionProcessorHolder
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.schedulers.SchedulerProvider
 
@@ -14,11 +17,10 @@ import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.schedulers.Sch
  */
 class CommentViewModel: ViewModel(), MviViewModel<MainIntent, CommentViewState> {
 
-    lateinit var mIntentsSubject : PublishSubject<MainIntent>
-    lateinit var mStatesObservable : Observable<CommentViewState>
+    private var mIntentsSubject : PublishSubject<MainIntent> = PublishSubject.create()
+    private var mStatesObservable : Observable<CommentViewState>
 
     init{
-        mIntentsSubject = PublishSubject.create()
         mStatesObservable = compose()
     }
 

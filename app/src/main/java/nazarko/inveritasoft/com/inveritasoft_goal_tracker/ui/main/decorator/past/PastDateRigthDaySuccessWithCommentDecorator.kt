@@ -1,4 +1,4 @@
-package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.future
+package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.past
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -17,30 +17,26 @@ import java.util.*
  */
 class PastDateRigthDaySuccessWithCommentDecorator(var context: Context, val goalsMap:HashMap<CalendarDay,Goal>) : DayViewDecorator {
 
-    lateinit var drawable: Drawable
-    lateinit var circledrawable: Drawable
-    lateinit var commentdrawable: Drawable
-    lateinit var finalDrawable:LayerDrawable
+     val drawable: Drawable = ContextCompat.getDrawable(context, R.drawable.success_circle_background)
+    val circledrawable: Drawable = ContextCompat.getDrawable(context,R.drawable.rigth_day)
+    val commentdrawable: Drawable = ContextCompat.getDrawable(context, R.drawable.comment)
+    val finalDrawable:LayerDrawable
 
-    private var today = CalendarDay.today()
+    private val today = CalendarDay.today()
     private val calendar = Calendar.getInstance()
 
     init{
-        drawable = ContextCompat.getDrawable(context, R.drawable.success_circle_background)
-        circledrawable = ContextCompat.getDrawable(context,R.drawable.rigth_day)
-        commentdrawable = ContextCompat.getDrawable(context, R.drawable.comment)
         finalDrawable = LayerDrawable(arrayOf(drawable,circledrawable,commentdrawable))
     }
 
     override fun shouldDecorate(day: CalendarDay?): Boolean {
-        var nextBoolean:Boolean
-        var todayBoolean:Boolean
-        calendar.setTime(day?.date)
+        val nextBoolean:Boolean
+        val todayBoolean:Boolean = goalsMap[day]?.result == ResultDay.SUCCESS && today.isAfter(day!!)
+        calendar.time = day?.date
         calendar.add(Calendar.DATE, 1)
-        var nextDate = CalendarDay.from(calendar.time)
-        nextBoolean = goalsMap.get(nextDate)?.result == ResultDay.SUCCESS
-        todayBoolean = goalsMap.get(day)?.result == ResultDay.SUCCESS && today.isAfter(day!!)
-        return  todayBoolean  && nextBoolean  && goalsMap.get(day)?.iscomment == true
+        val nextDate = CalendarDay.from(calendar.time)
+        nextBoolean = goalsMap[nextDate]?.result == ResultDay.SUCCESS
+        return  todayBoolean  && nextBoolean  && goalsMap[day]?.iscomment == true
     }
 
     override fun decorate(view: DayViewFacade?) {

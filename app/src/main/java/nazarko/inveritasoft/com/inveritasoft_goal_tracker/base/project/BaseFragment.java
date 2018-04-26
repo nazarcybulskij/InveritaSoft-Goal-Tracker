@@ -3,6 +3,7 @@ package nazarko.inveritasoft.com.inveritasoft_goal_tracker.base.project;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LifecycleRegistry;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 
 /**
@@ -11,10 +12,11 @@ import android.support.v4.app.Fragment;
 
 public class BaseFragment<T extends BaseFragment.ActivityListener>  extends Fragment implements LifecycleOwner {
 
-    T activityListener;
+    private T activityListener;
 
-    LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
+    private final LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
 
+    @NonNull
     @Override
     public LifecycleRegistry getLifecycle() {
         return mLifecycleRegistry;

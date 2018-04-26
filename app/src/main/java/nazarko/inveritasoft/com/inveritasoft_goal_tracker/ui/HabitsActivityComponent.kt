@@ -10,10 +10,7 @@ import nazarko.inveritasoft.com.inveritasoft_goal_tracker.util.Dao
  */
 
 @ActivityScope
-@Component(modules = arrayOf(
-        EmptyModule::class,
-        HabitsActivityModule::class
-), dependencies = arrayOf(HabitsApplicationComponent::class))
+@Component(modules = [(EmptyModule::class), (HabitsActivityModule::class)], dependencies = [(HabitsApplicationComponent::class)])
 interface HabitsActivityComponent {
 
     val dao: Dao

@@ -9,18 +9,16 @@ import kotlinx.android.synthetic.main.activity_create_habbit.*
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.R
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.base.project.BaseActivity
 
-/**
- * Created by nazarko on 23.02.18.
- */
+
 class CreateHabbitActivity:BaseActivity() {
 
-    var mCreatePagerAdapter: CreatePagerAdapter?=null
+    private var mCreatePagerAdapter: CreatePagerAdapter?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_habbit)
         mCreatePagerAdapter = CreatePagerAdapter(supportFragmentManager, listOf("Habbit", "Reminders"))
-        viewpager.adapter = mCreatePagerAdapter;
+        viewpager.adapter = mCreatePagerAdapter
         sliding_tabs.setupWithViewPager(viewpager)
         fab.hide()
         viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
@@ -39,7 +37,7 @@ class CreateHabbitActivity:BaseActivity() {
 
         val shareViewModel = ViewModelProviders.of(this).get(CreateHabbitShareViewModel::class.java)
         fab.setOnClickListener({
-            shareViewModel.clickFab.value = Unit;
+            shareViewModel.clickFab.value = Unit
         })
 
     }
@@ -66,10 +64,6 @@ class CreateHabbitActivity:BaseActivity() {
 
     private fun cancel() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    interface fabClickListener {
-        fun OnClickFab()
     }
 
 }

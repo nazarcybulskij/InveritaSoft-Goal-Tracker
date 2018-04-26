@@ -14,9 +14,9 @@ import java.util.*
 class HighlightWeekendsDecorator:DayViewDecorator {
 
 
-    private var calendar = Calendar.getInstance()
-    private lateinit var highlightDrawable: Drawable
-    private var color = Color.parseColor("#228BC34A")
+    private val calendar = Calendar.getInstance()
+    private val highlightDrawable: Drawable
+    private val color = Color.parseColor("#228BC34A")
 
     init{
         highlightDrawable = ColorDrawable(color)
@@ -24,7 +24,7 @@ class HighlightWeekendsDecorator:DayViewDecorator {
 
     override fun shouldDecorate(day: CalendarDay?): Boolean {
         day?.copyTo(calendar)
-        var weekDay = calendar.get(Calendar.DAY_OF_WEEK)
+        val weekDay = calendar.get(Calendar.DAY_OF_WEEK)
         return weekDay == Calendar.SATURDAY || weekDay == Calendar.SUNDAY
     }
 

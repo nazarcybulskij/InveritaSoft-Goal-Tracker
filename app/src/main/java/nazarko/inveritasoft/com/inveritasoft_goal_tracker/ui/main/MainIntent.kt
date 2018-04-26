@@ -1,13 +1,13 @@
 package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main
 
-import com.example.android.architecture.blueprints.todoapp.mvibase.MviIntent
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.base.mvi.MviIntent
 import com.prolificinteractive.materialcalendarview.CalendarDay
 
 /**
  * Created by nazarko on 15.02.18.
  */
 
-sealed class MainIntent:MviIntent{
+sealed class MainIntent: MviIntent {
 
     data class InitialIntent(var str:String) : MainIntent()
 
@@ -17,7 +17,7 @@ sealed class MainIntent:MviIntent{
 
     data class CommentDeleteIntent(var  date: CalendarDay,var comment:String) : MainIntent()
 
-    class CancelCommentIntent() : MainIntent()
+    class CancelCommentIntent : MainIntent()
 
 
 

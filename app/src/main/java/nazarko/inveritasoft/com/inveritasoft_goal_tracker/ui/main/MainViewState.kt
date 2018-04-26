@@ -1,6 +1,6 @@
 package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main
 
-import com.example.android.architecture.blueprints.todoapp.mvibase.MviViewState
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.base.mvi.MviViewState
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.logic.MainActionProcessorHolder
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.model.Goal
@@ -14,7 +14,7 @@ data class MainViewState(
         val active: Boolean,
         val loading: Boolean,
         val error: Throwable?
-):MviViewState{
+): MviViewState {
     companion object {
         fun idle(): MainViewState {
             return MainViewState(

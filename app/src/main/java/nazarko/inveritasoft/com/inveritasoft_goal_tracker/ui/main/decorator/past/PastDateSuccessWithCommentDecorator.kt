@@ -1,4 +1,4 @@
-package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.future
+package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.decorator.past
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -17,25 +17,20 @@ import java.util.*
  */
 class PastDateSuccessWithCommentDecorator(var context: Context, val goalsMap:HashMap<CalendarDay,Goal>) : DayViewDecorator {
 
-    lateinit var drawable: Drawable
-    lateinit var circledrawable: Drawable
-    lateinit var commentdrawable: Drawable
-    lateinit var finalDrawable:LayerDrawable
+     val drawable: Drawable = ContextCompat.getDrawable(context, R.drawable.success_circle_background)
+    val circledrawable: Drawable = ContextCompat.getDrawable(context,R.drawable.circle_day)
+    val commentdrawable: Drawable = ContextCompat.getDrawable(context, R.drawable.comment)
+    val finalDrawable:LayerDrawable
 
-    private var today = CalendarDay.today()
-    private val calendar = Calendar.getInstance()
+    private val today = CalendarDay.today()
 
     init{
-        drawable = ContextCompat.getDrawable(context, R.drawable.success_circle_background)
-        circledrawable = ContextCompat.getDrawable(context,R.drawable.circle_day)
-        commentdrawable = ContextCompat.getDrawable(context, R.drawable.comment)
         finalDrawable = LayerDrawable(arrayOf(drawable,circledrawable,commentdrawable))
     }
 
     override fun shouldDecorate(day: CalendarDay?): Boolean {
-        var todayBoolean:Boolean
-        todayBoolean = goalsMap.get(day)?.result == ResultDay.SUCCESS && today.isAfter(day!!)
-        return  todayBoolean &&  goalsMap.get(day)?.iscomment == true
+        val todayBoolean:Boolean = goalsMap[day]?.result == ResultDay.SUCCESS && today.isAfter(day!!)
+        return  todayBoolean &&  goalsMap[day]?.iscomment == true
     }
 
     override fun decorate(view: DayViewFacade?) {

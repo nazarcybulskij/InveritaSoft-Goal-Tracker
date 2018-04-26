@@ -23,7 +23,7 @@ class CreateRemindersAdapter(var data:MutableList<UserDto>): RecyclerView.Adapte
 
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        var userDto = data[position]
+        val userDto = data[position]
         holder?.txtName?.text = userDto.name
         holder?.txtComment?.text = userDto.comment
     }
@@ -34,8 +34,8 @@ class CreateRemindersAdapter(var data:MutableList<UserDto>): RecyclerView.Adapte
         var txtComment: TextView? = null
 
         init {
-            this.txtName = row?.findViewById<TextView>(R.id.txtName)
-            this.txtComment = row?.findViewById<TextView>(R.id.txtComment)
+            this.txtName = row.findViewById(R.id.txtName)
+            this.txtComment = row.findViewById(R.id.txtComment)
         }
     }
 }

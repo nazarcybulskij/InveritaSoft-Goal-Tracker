@@ -16,7 +16,7 @@ import nazarko.inveritasoft.com.inveritasoft_goal_tracker.R
  */
 class CreateRemindersFragment: Fragment() {
 
-    lateinit var mCreateRemindersAdapter: CreateRemindersAdapter
+    private lateinit var mCreateRemindersAdapter: CreateRemindersAdapter
 
 
     companion object {
@@ -32,10 +32,10 @@ class CreateRemindersFragment: Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mCreateRemindersAdapter = CreateRemindersAdapter(ArrayList<UserDto>());
+        mCreateRemindersAdapter = CreateRemindersAdapter(ArrayList())
         val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = mCreateRemindersAdapter;
+        recyclerView.adapter = mCreateRemindersAdapter
         val shareViewModel = ViewModelProviders.of(activity).get(CreateHabbitShareViewModel::class.java)
         shareViewModel.clickFab.observe(this, Observer {
             CreateRemindersDialog.show(activity)
@@ -45,11 +45,8 @@ class CreateRemindersFragment: Fragment() {
         })
     }
 
-    fun cancelReminders() {
 
-    }
-
-     fun okReminders(userDto: UserDto?) {
+     private fun okReminders(userDto: UserDto?) {
          userDto?.let {
              mCreateRemindersAdapter.data.add(userDto)
              mCreateRemindersAdapter.notifyDataSetChanged()

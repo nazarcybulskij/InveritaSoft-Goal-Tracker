@@ -2,7 +2,6 @@ package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.model
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.prolificinteractive.materialcalendarview.CalendarDay
 
 /**
  * Created by nazarko on 13.02.18.
@@ -23,11 +22,14 @@ data class Goal(var result: ResultDay, var iscomment: Boolean, var comment: Stri
         writeString(comment)
     }
 
-    companion object {
-        @JvmField
-        val CREATOR: Parcelable.Creator<Goal> = object : Parcelable.Creator<Goal> {
-            override fun createFromParcel(source: Parcel): Goal = Goal(source)
-            override fun newArray(size: Int): Array<Goal?> = arrayOfNulls(size)
+    companion object CREATOR : Parcelable.Creator<Goal> {
+        override fun createFromParcel(parcel: Parcel): Goal {
+            return Goal(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Goal?> {
+            return arrayOfNulls(size)
         }
     }
+
 }

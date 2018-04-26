@@ -1,15 +1,13 @@
 package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.viewmodel
 
 import android.arch.lifecycle.ViewModel
-import android.util.Log
-import com.example.android.architecture.blueprints.todoapp.mvibase.MviResult
-import com.example.android.architecture.blueprints.todoapp.mvibase.MviView
-import com.example.android.architecture.blueprints.todoapp.mvibase.MviViewModel
-import com.example.android.architecture.blueprints.todoapp.mvibase.MviViewState
 import io.reactivex.Observable
-import io.reactivex.ObservableTransformer
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.base.mvi.MviResult
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.base.mvi.MviView
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.base.mvi.MviViewModel
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.base.mvi.MviViewState
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.*
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.logic.MainActionProcessorHolder
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.logic.Navigator
@@ -18,19 +16,18 @@ import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.schedulers.Sch
 /**
  * Created by nazarko on 15.02.18.
  */
-class MainViewModel:ViewModel(),MviViewModel<MainIntent,MainViewState> {
+class MainViewModel:ViewModel(), MviViewModel<MainIntent, MainViewState> {
 
 
-    lateinit var mIntentsSubject : PublishSubject<MainIntent>
-    lateinit var mStatesObservable : Observable<MainViewState>
+    private var mIntentsSubject : PublishSubject<MainIntent> = PublishSubject.create()
+    private var mStatesObservable : Observable<MainViewState>
 
 
-    lateinit var mNavigateSubject : PublishSubject<MainAction>
-    lateinit var mNavigateObservable : Observable<NavigationTarget>
+    private var mNavigateSubject : PublishSubject<MainAction>
+    private var mNavigateObservable : Observable<NavigationTarget>
 
 
     init{
-        mIntentsSubject = PublishSubject.create()
         mStatesObservable = compose()
         mNavigateSubject = PublishSubject.create()
         mNavigateObservable = navigatecompose()
@@ -54,8 +51,7 @@ class MainViewModel:ViewModel(),MviViewModel<MainIntent,MainViewState> {
     }
 
     private fun navigatecompose(): Observable<NavigationTarget> {
-        return mNavigateSubject.compose(Navigator(SchedulerProvider()).actionProcessor);
-
+        return mNavigateSubject.compose(Navigator(SchedulerProvider()).actionProcessor)
 
 
     }
@@ -65,26 +61,15 @@ class MainViewModel:ViewModel(),MviViewModel<MainIntent,MainViewState> {
         intents.subscribe(mIntentsSubject)
     }
 
-    public fun processNavigate(intents: Observable<MainAction>) {
+    fun processNavigate(intents: Observable<MainAction>) {
         intents.subscribe(mNavigateSubject)
     }
 
     override fun states(): Observable<MainViewState> =
-        mStatesObservable;
+        mStatesObservable
 
-     public fun navigates(): Observable<NavigationTarget> =
-             mNavigateObservable;
-
-    /**
-     * take only the first ever InitialIntent and all intents of other types
-     * to avoid reloading data on config changes
-     */
-    private val intentFilter: ObservableTransformer<MainIntent, MainIntent>
-        get() = ObservableTransformer { intents ->
-            intents.publish { shared ->
-                shared.ofType(MainIntent.InitialIntent::class.java).take(1).cast(MainIntent::class.java)
-            }
-        }
+    fun navigates(): Observable<NavigationTarget> =
+             mNavigateObservable
 
     private fun actionFromIntent(intent: MainIntent): MainAction {
         return when (intent) {
