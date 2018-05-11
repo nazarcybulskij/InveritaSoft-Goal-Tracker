@@ -8,13 +8,15 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentActivity
-import android.view.Gravity
-import android.view.View
-import android.view.Window
-import android.view.WindowManager
+import android.util.Log
+import android.view.*
 import android.widget.CheckBox
+import android.widget.CompoundButton
 import android.widget.TextView
+import android.widget.Toast
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.R
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.createUIhabbits.data.DayOfWeek
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.createUIhabbits.data.Reminder
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -23,21 +25,29 @@ import java.util.*
  */
 class CreateRemindersDialog: DialogFragment() {
 
+
+
+
+
     private lateinit var  mTimeTextView: TextView
 
 
     private var shareViewModel: CreateHabbitShareViewModel? = null
 
     private val cal = Calendar.getInstance()!!
+
+    var reminder = Reminder(cal.time, arrayOf(DayOfWeek.SUNDAY,DayOfWeek.MONDAY,DayOfWeek.TUESDAY,DayOfWeek.WEDNESDAY,DayOfWeek.THURSDAY,DayOfWeek.FRIDAY,DayOfWeek.SATURDAY))
+
     private val dateFormat = SimpleDateFormat("hh:mm a",Locale.US)
     private val timeListener = TimePickerDialog.OnTimeSetListener{ view, hour, minute ->
         cal.set(Calendar.HOUR,hour)
         cal.set(Calendar.MINUTE,minute)
+        reminder.date = cal.time
         mTimeTextView.text = dateFormat.format(cal.time).toUpperCase()
     }
 
     companion object {
-        private val TAG = "CreateRemindersDialog"
+        private const val TAG = "CreateRemindersDialog"
 
         fun show(activity: FragmentActivity) {
             CreateRemindersDialog().apply {
@@ -59,13 +69,21 @@ class CreateRemindersDialog: DialogFragment() {
             dismiss()
         }
 
-//        for (checkbox in ViewTagRange(view)){
-//            if (checkbox is CheckBox){
-//                checkbox.setOnCheckedChangeListener{ buttonView, isChecked ->
-//                    Toast.makeText(activity,"dfgdfgfdg",Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//        }
+
+        var checkBoxs = (view as ViewGroup).getAllViewByTag("tag")
+
+        for (checkBox in checkBoxs){
+            checkBox.setOnClickListener {
+                if((it as CheckBox).isChecked()) {
+                    Log.d("TAG", "Checked ${checkBoxs.indexOf(it)}")
+                    reminder.days[checkBoxs.indexOf(it)] =  DayOfWeek.from(checkBoxs.indexOf(it))
+                }else {
+                    Log.d("TAG", "Un-Checked ${checkBoxs.indexOf(it)} ")
+                    reminder.days[checkBoxs.indexOf(it)] =  DayOfWeek.NONE
+                }
+
+            }
+        }
 
 
         mTimeTextView =   view.findViewById(R.id.time)
@@ -90,26 +108,6 @@ class CreateRemindersDialog: DialogFragment() {
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         shareViewModel = ViewModelProviders.of(activity).get(CreateHabbitShareViewModel::class.java)
-    }
-
-    class ViewTagRange(var view:View):Iterable<View>{
-        override fun iterator(): Iterator<View> {
-            return ViewIterator(this)
-        }
-    }
-
-    class ViewIterator(private val range: ViewTagRange) : Iterator<View> {
-
-        private var current: View = range.view.findViewWithTag<View>("tag")
-
-        override fun hasNext() :Boolean {
-            return true
-        }
-
-        override fun next() :View {
-            current = range.view.findViewWithTag<CheckBox>("tag")
-            return current
-        }
     }
 
 }

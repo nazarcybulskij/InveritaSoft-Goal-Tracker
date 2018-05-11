@@ -1,11 +1,11 @@
 package nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.logic
 
-import nazarko.inveritasoft.com.inveritasoft_goal_tracker.base.mvi.MviAction
-import nazarko.inveritasoft.com.inveritasoft_goal_tracker.base.mvi.MviResult
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.Single
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.base.mvi.MviAction
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.base.mvi.MviResult
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.CommentResult
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.MainAction
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.MainResult
@@ -27,7 +27,7 @@ class MainActionProcessorHolder(private val schedulerProvider: BaseSchedulerProv
         var goal = goals[date]
         if (goal == null) {
             goal = Goal(ResultDay.SUCCESS, false)
-            goals.put(date, goal)
+            goals[date] = goal
         } else {
             when (goal.result) {
                 ResultDay.FAIL -> goal.result = ResultDay.NONE
@@ -42,7 +42,7 @@ class MainActionProcessorHolder(private val schedulerProvider: BaseSchedulerProv
         var goal = MainActionProcessorHolder.goals[date]
         if (goal == null) {
             goal = Goal(ResultDay.NONE, false)
-            MainActionProcessorHolder.goals.put(date, goal)
+            MainActionProcessorHolder.goals[date] = goal
         }
         goal.iscomment = false
         return Single.just(goals)
@@ -56,7 +56,7 @@ class MainActionProcessorHolder(private val schedulerProvider: BaseSchedulerProv
         var goal = MainActionProcessorHolder.goals[date]
         if (goal == null) {
             goal = Goal(ResultDay.NONE, true,comment)
-            MainActionProcessorHolder.goals.put(date, goal)
+            MainActionProcessorHolder.goals[date] = goal
         }
         goal.comment = comment
         goal.iscomment = true

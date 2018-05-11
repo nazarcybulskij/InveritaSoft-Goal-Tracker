@@ -20,7 +20,7 @@ class HabitsViewModelFactory private constructor(
         if (modelClass == CommentViewModel::class.java) {
             return  CommentViewModel() as T
         }
-        throw IllegalArgumentException("unknown model class " + modelClass)
+        throw IllegalArgumentException("unknown model class $modelClass")
     }
 
     companion object : SingletonHolder<HabitsViewModelFactory, Context>(::HabitsViewModelFactory)

@@ -2,6 +2,7 @@ package nazarko.inveritasoft.com.inveritasoft_goal_tracker
 
 import android.content.Context
 import dagger.Component
+import nazarko.inveritasoft.com.inveritasoft_goal_tracker.ui.main.HabitsActivity
 import nazarko.inveritasoft.com.inveritasoft_goal_tracker.util.DB
 
 /**
@@ -14,5 +15,8 @@ interface HabitsApplicationComponent {
     fun context(): Context
 
     val database: DB
+
+    fun inject(habbitApplication: HabitsApplication)
+
 
 }

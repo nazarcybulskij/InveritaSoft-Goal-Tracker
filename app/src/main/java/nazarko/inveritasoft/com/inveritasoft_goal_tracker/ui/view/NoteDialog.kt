@@ -62,9 +62,9 @@ class NoteDialog : DialogFragment(), MviView<MainIntent, CommentViewState> {
     private val disposables = CompositeDisposable()
 
     companion object {
-        private val TAG = "NoteDialog"
-        val BUNDLE_DIALOG_DATE = "bundle:date"
-        val BUNDLE_DIALOG_GOAL = "bundle:goal"
+        private const val TAG = "NoteDialog"
+        const val BUNDLE_DIALOG_DATE = "bundle:date"
+        const val BUNDLE_DIALOG_GOAL = "bundle:goal"
 
         fun show(activity: AppCompatActivity, date: CalendarDay,goal:Goal) {
             NoteDialog().apply {

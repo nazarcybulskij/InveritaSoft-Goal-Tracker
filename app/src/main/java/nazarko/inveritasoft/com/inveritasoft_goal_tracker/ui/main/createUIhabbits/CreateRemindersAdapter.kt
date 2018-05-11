@@ -15,7 +15,7 @@ class CreateRemindersAdapter(var data:MutableList<UserDto>): RecyclerView.Adapte
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent?.context)
-                .inflate(R.layout.user_list_row, parent, false)
+                .inflate(R.layout.reminder_row, parent, false)
         return ViewHolder(itemView)
     }
 
@@ -24,18 +24,14 @@ class CreateRemindersAdapter(var data:MutableList<UserDto>): RecyclerView.Adapte
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
         val userDto = data[position]
-        holder?.txtName?.text = userDto.name
-        holder?.txtComment?.text = userDto.comment
     }
 
 
+
     class ViewHolder(row: View) : RecyclerView.ViewHolder(row) {
-        var txtName: TextView? = null
-        var txtComment: TextView? = null
 
         init {
-            this.txtName = row.findViewById(R.id.txtName)
-            this.txtComment = row.findViewById(R.id.txtComment)
+
         }
     }
 }

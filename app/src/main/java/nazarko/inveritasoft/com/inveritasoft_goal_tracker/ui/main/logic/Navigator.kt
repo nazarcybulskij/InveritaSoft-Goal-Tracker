@@ -41,7 +41,7 @@ private fun MainActionProcessorHolder.Companion.getGoalFromDate(date: CalendarDa
     var goal = goals[date]
     if (goal == null) {
         goal = Goal(ResultDay.NONE, false)
-        goals.put(date, goal)
+        goals[date] = goal
     }
     return goal
 

@@ -20,14 +20,13 @@ class TodayDateSuccessWithCommentDecorator(var context: Context, val goalsMap:Ha
     val drawable: Drawable = ContextCompat.getDrawable(context, R.drawable.success_circle_background)
     val circledrawable: Drawable = ContextCompat.getDrawable(context,R.drawable.circle_day)
     private val todaydrawable: Drawable = ContextCompat.getDrawable(context,R.drawable.today)
-    val commentdrawable: Drawable
+    val commentdrawable: Drawable = ContextCompat.getDrawable(context, R.drawable.comment)
 
     val finalDrawable:LayerDrawable
 
     private val today = CalendarDay.today()
 
     init{
-        commentdrawable = ContextCompat.getDrawable(context, R.drawable.comment)
         finalDrawable = LayerDrawable(arrayOf(drawable,todaydrawable,circledrawable,commentdrawable))
     }
 

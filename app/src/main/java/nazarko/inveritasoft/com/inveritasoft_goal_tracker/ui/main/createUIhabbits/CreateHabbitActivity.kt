@@ -18,7 +18,10 @@ class CreateHabbitActivity:BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_habbit)
         mCreatePagerAdapter = CreatePagerAdapter(supportFragmentManager, listOf("Habbit", "Reminders"))
+
         viewpager.adapter = mCreatePagerAdapter
+
+
         sliding_tabs.setupWithViewPager(viewpager)
         fab.hide()
         viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
